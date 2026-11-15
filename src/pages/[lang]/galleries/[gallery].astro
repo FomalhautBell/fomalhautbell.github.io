@@ -9,8 +9,12 @@ import Breadcrumb from "@/components/Breadcrumb.astro";
 import Datetime from "@/components/Datetime.astro";
 import IconGallery from "@/assets/icons/IconGallery.svg";
 import { slugifyStr } from "@/utils/slugify";
+import { getLangFromUrl, useTranslations, localizePath } from "@/i18n/utils";
 import { SITE } from "@/config";
 import { LANGS } from "@/i18n/ui";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
 
 export async function getStaticPaths() {
   if (!SITE.showGalleries) return [];
@@ -84,7 +88,7 @@ const gallerySchema = {
   ...(coverImageSrc && { image: coverImageSrc }),
   creator: {
     "@type": "Person",
-    name: SITE.author,
+    name: t("site.author"),
     ...(SITE.profile && { url: SITE.profile }),
   },
   numberOfItems: images.length,
@@ -92,7 +96,7 @@ const gallerySchema = {
 ---
 
 <Layout
-  title={`${title} | Galleries | ${SITE.title}`}
+  title={`${title} | ${t("galleries.title")} | ${t("site.title")}`}
   description={description}
   structuredData={gallerySchema}
 >

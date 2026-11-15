@@ -5,6 +5,7 @@ export const SITE = {
   desc: "记录代码、系统，以及偶尔的跑题。",
   title: "FomalhautBell",
   ogImage: "og.webp", // located in the public folder
+  ogImageZh: "og-zh.webp", // 中文站点使用的 OG 图
   lightAndDarkMode: true,
   postPerIndex: 6,
   postPerPage: 12,

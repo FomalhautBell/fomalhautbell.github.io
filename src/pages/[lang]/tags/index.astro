@@ -35,7 +35,7 @@ const tagsWithCount = tags.map(({ tag, tagName }) => ({
 const maxCount = Math.max(...tagsWithCount.map(t => t.count));
 ---
 
-<Layout title={`${t("tags.title")} | ${SITE.title}`}>
+<Layout title={`${t("tags.title")} | ${t("site.title")}`}>
   <Header />
   <Breadcrumb />
   <main id="main-content" class="app-layout pb-12">

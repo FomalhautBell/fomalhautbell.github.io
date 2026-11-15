@@ -14,7 +14,7 @@ const t = useTranslations(lang);
 ---
 
 <Layout
-  title={`${title} | ${SITE.title}`}
+  title={`${title} | ${t("site.title")}`}
   description={description}
 >
   <Header />
@@ -35,7 +35,7 @@ const t = useTranslations(lang);
         </div>
         <h1 class="hero-title">
           <span class="greeting">{lang === "zh-CN" ? "你好，我是" : "Hi, I'm"}</span>
-          <span class="name-glow">{SITE.author}</span>
+          <span class="name-glow">{t("site.author")}</span>
         </h1>
       </div>
     </div>

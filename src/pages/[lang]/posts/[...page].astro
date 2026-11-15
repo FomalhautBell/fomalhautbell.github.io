@@ -34,8 +34,8 @@ const totalPosts = page.total;
 
 // Prevent duplicate metadata in pagination
 const metaTitle = page.currentPage > 1
-  ? `${t("posts.title")} (${t("posts.pageOf", { current: page.currentPage, total: page.lastPage })}) | ${SITE.title}`
-  : `${t("posts.title")} | ${SITE.title}`;
+  ? `${t("posts.title")} (${t("posts.pageOf", { current: page.currentPage, total: page.lastPage })}) | ${t("site.title")}`
+  : `${t("posts.title")} | ${t("site.title")}`;
 
 const metaDesc = page.currentPage > 1
   ? t("posts.metaDescPaged", { current: page.currentPage, total: page.lastPage })

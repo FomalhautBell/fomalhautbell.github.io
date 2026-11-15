@@ -1,0 +1,64 @@
+---
+/**
+ * Wordmark — 站点字标。
+ * 中文用文字标（良绮·难忘），英文用 SVG 字标，
+ * 两者共用中间的点作为强调色，保持一致的视觉语言。
+ */
+import Logo from "@/assets/logo/wordmark.svg";
+import { getLangFromUrl } from "@/i18n/utils";
+
+type Props = {
+  size?: "header" | "footer";
+  class?: string;
+};
+
+const { size = "header", class: className = "" } = Astro.props;
+const lang = getLangFromUrl(Astro.url);
+---
+
+{
+  lang === "zh-CN" ? (
+    <span class:list={["wordmark-zh", `wordmark-zh--${size}`]}>
+      良绮<span class="wordmark-dot">·</span>难忘
+    </span>
+  ) : (
+    <Logo class={className} />
+  )
+}
+
+<style>
+  .wordmark-zh {
+    display: inline-block;
+    font-family:
+      var(--font-app),
+      "PingFang SC",
+      "Hiragino Sans GB",
+      "Noto Sans SC",
+      "Microsoft YaHei",
+      sans-serif;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: var(--foreground);
+    line-height: 1.1;
+    white-space: nowrap;
+  }
+
+  .wordmark-zh--header {
+    font-size: 1.5rem;
+  }
+
+  .wordmark-zh--footer {
+    font-size: 1.15rem;
+    opacity: 0.8;
+    transition: opacity 0.3s ease;
+  }
+
+  :global(.group:hover) .wordmark-zh--footer {
+    opacity: 1;
+  }
+
+  .wordmark-dot {
+    color: rgb(167, 90, 90);
+    margin: 0 0.04em;
+  }
+</style>

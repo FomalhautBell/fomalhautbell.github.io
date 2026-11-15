@@ -11,6 +11,10 @@ export const LANG_LABELS: Record<Lang, string> = {
 
 export const ui = {
   "zh-CN": {
+    // ── 站点标识 ──
+    "site.title": "良绮难忘",
+    "site.author": "良绮难忘",
+
     // ── 导航 ──
     "nav.posts": "文章",
     "nav.tags": "标签",
@@ -131,6 +135,10 @@ export const ui = {
   },
 
   en: {
+    // ── Site identity ──
+    "site.title": "FomalhautBell",
+    "site.author": "FomalhautBell",
+
     "nav.posts": "Posts",
     "nav.tags": "Tags",
     "nav.about": "About",

@@ -27,11 +27,13 @@ type Props = {
 };
 
 const {
-  title = SITE.title,
-  author = SITE.author,
+  title = t("site.title"),
+  author = t("site.author"),
   profile = SITE.profile,
   description = t("home.description"),
-  ogImage = SITE.ogImage ? `/${SITE.ogImage}` : "/og.png",
+  ogImage = SITE.ogImage
+    ? `/${pageLang === "zh-CN" && SITE.ogImageZh ? SITE.ogImageZh : SITE.ogImage}`
+    : "/og.png",
   canonicalURL: canonicalURLProp,
   pubDatetime,
   modDatetime,
@@ -85,7 +87,7 @@ const finalStructuredData = structuredDataProp ?? (
       ? {
           "@context": "https://schema.org",
           "@type": "WebSite",
-          name: SITE.title,
+          name: t("site.title"),
           url: SITE.website,
           description: SITE.desc,
           potentialAction: {
@@ -156,7 +158,7 @@ const showGrain = SITE.backdropEffects.grain;
     <link rel="sitemap" href="/sitemap-index.xml" />
 
     <!-- Open Graph / Facebook -->
-    <meta property="og:site_name" content={SITE.title} />
+    <meta property="og:site_name" content={t("site.title")} />
     <meta property="og:type" content={isArticle ? "article" : "website"} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
@@ -189,7 +191,7 @@ const showGrain = SITE.backdropEffects.grain;
     <meta property="twitter:title" content={title} />
     <meta property="twitter:description" content={description} />
     <meta property="twitter:image" content={socialImageURL} />
-    <meta property="twitter:creator" content={SITE.author} />
+    <meta property="twitter:creator" content={t("site.author")} />
 
     <!-- Google JSON-LD Structured data -->
     {
@@ -207,7 +209,7 @@ const showGrain = SITE.backdropEffects.grain;
     <link
       rel="alternate"
       type="application/rss+xml"
-      title={SITE.title}
+      title={t("site.title")}
       href={new URL("rss.xml", Astro.site)}
     />
 

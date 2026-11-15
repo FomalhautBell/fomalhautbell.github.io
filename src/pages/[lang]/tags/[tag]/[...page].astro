@@ -46,8 +46,8 @@ const tagOgImage = `/tags/${tag}/og.png`;
 
 // Prevent duplicate metadata in tag pagination pages
 const metaTitle = page.currentPage > 1
-  ? `${t("tags.pageTitle", { name: tagName })} (${t("posts.pageOf", { current: page.currentPage, total: page.lastPage })}) | ${SITE.title}`
-  : `${t("tags.pageTitle", { name: tagName })} | ${SITE.title}`;
+  ? `${t("tags.pageTitle", { name: tagName })} (${t("posts.pageOf", { current: page.currentPage, total: page.lastPage })}) | ${t("site.title")}`
+  : `${t("tags.pageTitle", { name: tagName })} | ${t("site.title")}`;
 
 const tagDescription = page.currentPage > 1
   ? `${t("tags.metaDesc", { name: tagName })} (${t("posts.pageOf", { current: page.currentPage, total: page.lastPage })})`

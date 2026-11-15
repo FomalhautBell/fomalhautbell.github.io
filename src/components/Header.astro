@@ -4,7 +4,7 @@ import IconSearch from "@/assets/icons/IconSearch.svg";
 import IconArchive from "@/assets/icons/IconArchive.svg";
 import IconGallery from "@/assets/icons/IconGallery.svg";
 import IconSunHigh from "@/assets/icons/IconSunHigh.svg";
-import Logo from "@/assets/logo/wordmark.svg";
+import Wordmark from "./Wordmark.astro";
 import LinkButton from "./LinkButton.astro";
 import MobileMenu from "./MobileMenu.astro";
 import { SITE } from "@/config";
@@ -61,7 +61,7 @@ const isActive = (path: string) => {
           href={localizePath("/", lang)}
           class="group relative z-20 flex items-center gap-2 text-xl font-bold tracking-tight sm:text-2xl shrink-0"
         >
-          <Logo class="w-37.5 dark:invert" />
+          <Wordmark size="header" class="w-37.5 dark:invert" />
         </a>
 
 
