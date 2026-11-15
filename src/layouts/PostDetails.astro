@@ -11,7 +11,7 @@ import BackToTopButton from "@/components/BackToTopButton.astro";
 import GalleryEmbed from "@/components/GalleryEmbed.astro";
 import { getPath } from "@/utils/getPath";
 import { slugifyStr } from "@/utils/slugify";
-import { getReadingTime } from "@/utils/readingTime";
+import { getReadingTimeMinutes } from "@/utils/readingTime";
 import { SITE } from "@/config";
 import { getLangFromUrl, useTranslations, localizePath } from "@/i18n/utils";
 
@@ -39,7 +39,7 @@ const {
 } = post.data;
 
 const { Content } = await render(post);
-const readingTime = post.body ? getReadingTime(post.body) : null;
+const readingTime = post.body ? getReadingTimeMinutes(post.body) : null;
 
 let ogImageUrl: string | undefined;
 
@@ -88,7 +88,7 @@ const nextPost =
 
 <Layout {...layoutProps}>
   <Header />
-  {SITE.showBackButton && <Breadcrumb withBackButton />}
+  {SITE.showBackButton && <Breadcrumb withBackButton currentLabel={title} />}
   <main
     id="main-content"
     class:list={["relative app-layout pb-12", { "mt-8": !SITE.showBackButton }]}
@@ -141,7 +141,7 @@ const nextPost =
               <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
               <circle cx="12" cy="7" r="4"></circle>
             </svg>
-            <span class="opacity-70">{author}</span>
+            <span class="opacity-70">{author === SITE.author ? t("site.author") : author}</span>
           </div>
 
           <!-- Date chip -->
@@ -189,7 +189,7 @@ const nextPost =
                 <path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" />
                 <path d="M12 7v5l3 3" />
               </svg>
-              <span class="text-sm opacity-70">{readingTime}</span>
+              <span class="text-sm opacity-70">{t("post.minutesRead", { minutes: readingTime })}</span>
             </div>
           )}
 
@@ -207,7 +207,7 @@ const nextPost =
 
     <article
       id="article"
-      class="app-prose mt-8 w-full max-w-app prose-pre:bg-(--shiki-light-bg) dark:prose-pre:bg-(--shiki-dark-bg)"
+      class="app-prose prose-article mt-8 w-full max-w-app prose-pre:bg-(--shiki-light-bg) dark:prose-pre:bg-(--shiki-dark-bg)"
     >
       <Content components={{ GalleryEmbed }} />
     </article>

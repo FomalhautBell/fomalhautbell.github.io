@@ -7,79 +7,15 @@ export function getStaticPaths() {
   return LANGS.map(lang => ({ params: { lang } }));
 }
 
-type Section = { h: string; ps: string[] };
-
-const content: Record<Lang, { lede: string; sections: Section[] }> = {
-  "zh-CN": {
-    lede: "一个关于网络与代码的个人笔记本：软件、系统，以及偶尔跑题到别处的东西。",
-    sections: [
-      {
-        h: "这是什么",
-        ps: [
-          "有些想法值得写清楚了再放下，而不是散落在各种临时笔记里。这里主要记录编程、工具链，以及那些越看越有意思的计算机细节。",
-        ],
-      },
-      {
-        h: "会写什么",
-        ps: [
-          "<strong>工程笔记</strong> —— 在搭建东西时学到的东西，通常是踩坑之后才学到的。",
-          "<strong>工具</strong> —— 编辑器、终端、语言，以及那些会慢慢累积起来的小改进。",
-          "<strong>长一点的思考</strong> —— 偶尔写点随笔，留给值得多讲几句的话题。",
-        ],
-      },
-      {
-        h: "关于本站",
-        ps: [
-          '用 <a href="https://astro.build/">Astro</a> 构建，主题来自 <a href="https://github.com/satnaing/astro-paper">AstroPaper</a> 并做了大量改造。字体是等宽体，配色偏暖、对比度偏低，整站是纯静态文件。',
-          "没有统计脚本，没有追踪器，没有弹窗订阅。",
-        ],
-      },
-    ],
-  },
-  en: {
-    lede: "A personal notebook on the web: software, systems, and the occasional detour into something unrelated.",
-    sections: [
-      {
-        h: "What this is",
-        ps: [
-          "Somewhere to write things down properly instead of leaving them in scattered notes. Posts are mostly about programming, tooling, and the parts of computing that reward a closer look.",
-        ],
-      },
-      {
-        h: "What gets written",
-        ps: [
-          "<strong>Engineering notes</strong> — things learned while building, usually the hard way.",
-          "<strong>Tooling</strong> — editors, terminals, languages, and the small improvements that compound.",
-          "<strong>Longer reflections</strong> — the occasional essay when a topic deserves more than a snippet.",
-        ],
-      },
-      {
-        h: "Colophon",
-        ps: [
-          'Built with <a href="https://astro.build/">Astro</a> on a theme derived from <a href="https://github.com/satnaing/astro-paper">AstroPaper</a>, heavily customized. Typography is set in a monospace face, the palette is warm and low-contrast, and the whole thing ships as static files.',
-          "No analytics, no trackers, no newsletter pop-ups.",
-        ],
-      },
-    ],
-  },
+const placeholder: Record<Lang, string> = {
+  "zh-CN": "这儿以后会写点关于自己的东西，先空着。",
+  en: "Something about me will go here. Left blank for now.",
 };
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
-const { lede, sections } = content[lang];
 ---
 
 <AboutLayout title={t("about.title")} description={t("about.description")}>
-  <p class="text-lg opacity-80">{lede}</p>
-
-  {
-    sections.map(section => (
-      <>
-        <h2>{section.h}</h2>
-        {section.ps.map(p => (
-          <p set:html={p} />
-        ))}
-      </>
-    ))
-  }
+  <p class="opacity-60">{placeholder[lang]}</p>
 </AboutLayout>

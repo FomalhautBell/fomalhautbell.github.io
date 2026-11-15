@@ -5,9 +5,11 @@ import { getLangFromUrl, useTranslations, localizePath, stripLang } from "@/i18n
 
 type Props = {
   withBackButton?: boolean;
+  /** 当前页显示名称（例如文章标题），覆盖由路径推导出的名字 */
+  currentLabel?: string;
 };
 
-const { withBackButton = false } = Astro.props as Props;
+const { withBackButton = false, currentLabel } = Astro.props as Props;
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
@@ -28,7 +30,13 @@ const breadcrumbs = buildBreadcrumbItems(stripLang(Astro.url.pathname), {
   compactNumericPagination: true,
 });
 
-const currentPageLabel = breadcrumbs.at(-1)?.label ?? t("breadcrumb.home");
+const items = currentLabel
+  ? breadcrumbs.map((item, i) =>
+      i === breadcrumbs.length - 1 ? { label: currentLabel, href: null } : item
+    )
+  : breadcrumbs;
+
+const currentPageLabel = items.at(-1)?.label ?? t("breadcrumb.home");
 ---
 
 <nav
@@ -62,7 +70,7 @@ const currentPageLabel = breadcrumbs.at(-1)?.label ?? t("breadcrumb.home");
         </a>
       </li>
       {
-        breadcrumbs.map(item => (
+        items.map(item => (
           <li class:list={["breadcrumb-item", { "is-current": !item.href }]}>
             {item.href ? (
               <a href={localizePath(item.href, lang)} class="breadcrumb-link">

@@ -56,7 +56,8 @@ const { noMarginTop = false, class: className, ...attrs } = Astro.props;
         </p>
       </div>
 
-      <!-- Social links -->
+      <!-- Social links（没有配置时整块不渲染） -->
+      {socialLinks.length > 0 && (
       <nav class="flex flex-col items-center gap-3 sm:items-end" aria-labelledby={socialHeadingId}>
         <p
           id={socialHeadingId}
@@ -83,6 +84,7 @@ const { noMarginTop = false, class: className, ...attrs } = Astro.props;
           }
         </ul>
       </nav>
+      )}
     </div>
 
     <!-- Bottom bar -->
@@ -101,7 +103,27 @@ const { noMarginTop = false, class: className, ...attrs } = Astro.props;
         {t("site.title")} · {t("footer.rights")}
       </p>
       <p class="font-firacode text-[11px] tracking-wide text-foreground/45">
-        {t("footer.madeWith")}
+        {
+          t("footer.madeWith")
+            .split("♥")
+            .map((part, i) =>
+              i === 0 ? (
+                <>{part}</>
+              ) : (
+                <>
+                  <svg
+                    class="inline-block size-3 align-[-1px] text-accent"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    aria-hidden="true"
+                  >
+                    <path d="M12 21s-7.5-4.6-9.7-9A5.4 5.4 0 0 1 12 6.6 5.4 5.4 0 0 1 21.7 12c-2.2 4.4-9.7 9-9.7 9z" />
+                  </svg>
+                  {part}
+                </>
+              )
+            )
+        }
       </p>
     </div>
   </div>

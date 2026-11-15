@@ -104,6 +104,7 @@ export const ui = {
     "post.toc": "目录",
     "post.backToTop": "回到顶部",
     "post.minutesRead": "约 {minutes} 分钟",
+    "post.by": "作者",
     "post.published": "发布于",
     "post.updated": "更新于",
 
@@ -218,6 +219,7 @@ export const ui = {
     "post.toc": "Table of contents",
     "post.backToTop": "Back to top",
     "post.minutesRead": "{minutes} min read",
+    "post.by": "Written by",
     "post.published": "Published",
     "post.updated": "Updated",
 

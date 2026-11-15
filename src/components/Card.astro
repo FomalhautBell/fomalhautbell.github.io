@@ -4,7 +4,7 @@ import type { ImageMetadata } from "astro";
 import { Image } from "astro:assets";
 import { slugifyStr } from "@/utils/slugify";
 import { getEntryPath, getGallerySlug } from "@/utils/contentEntry";
-import { getReadingTime } from "@/utils/readingTime";
+import { getReadingTimeMinutes } from "@/utils/readingTime";
 import Datetime from "./Datetime.astro";
 import IconGallery from "@/assets/icons/IconGallery.svg";
 import IconClock from "@/assets/icons/IconClock.svg";
@@ -35,12 +35,13 @@ const modDatetime = "modDatetime" in data ? data.modDatetime : null;
 const timezone = "timezone" in data ? data.timezone : undefined;
 const tags = "tags" in data ? data.tags : [];
 const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
 const href = localizePath(getEntryPath({ collection, id, filePath }), lang);
 const isGallery = collection === "galleries";
 const headingId = `${collection}-${slugifyStr(String(id))}-title`;
 const descriptionId = `${collection}-${slugifyStr(String(id))}-description`;
 const viewTransitionName = slugifyStr(String(title).replaceAll(".", "-"));
-const readingTime = body ? getReadingTime(body) : null;
+const readingTime = body ? getReadingTimeMinutes(body) : null;
 
 // Resolve cover image source
 let coverSrc: string | ImageMetadata | undefined;
@@ -197,7 +198,7 @@ if (SITE.showCoverImages) {
       {readingTime && (
         <span class="flex items-center gap-1 text-sm text-foreground/60 whitespace-nowrap">
           <IconClock class="size-4 shrink-0" aria-hidden="true" />
-          {readingTime}
+          {readingTime && t("post.minutesRead", { minutes: readingTime })}
         </span>
       )}
     </div>

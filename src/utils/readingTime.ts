@@ -1,29 +1,39 @@
 /**
- * Calculates the estimated reading time for a given piece of text.
- * Strips markdown/MDX syntax before counting words for a more accurate result.
+ * 计算文章的预计阅读时长。
+ * 中文按字符数、西文按单词数分别估算，再取整。
  *
- * @param body - Raw markdown/MDX string content
- * @param wordsPerMinute - Average reading speed (default: 200 wpm)
- * @returns Formatted string like "3 min read" or "< 1 min read"
+ * @param body - 原始 markdown/MDX 内容
+ * @param cjkCharsPerMinute - 中文阅读速度（默认 350 字/分钟）
+ * @param wordsPerMinute - 西文阅读速度（默认 200 词/分钟）
+ * @returns 分钟数（至少 1）
  */
-export function getReadingTime(body: string, wordsPerMinute = 200): string {
-  // Strip frontmatter
+export function getReadingTimeMinutes(
+  body: string,
+  cjkCharsPerMinute = 350,
+  wordsPerMinute = 200
+): number {
+  // 去掉 frontmatter
   const withoutFrontmatter = body.replace(/^---[\s\S]*?---\n?/, "");
 
-  // Strip common markdown/MDX syntax that isn't real words
+  // 去掉不是正文的 markdown/MDX 语法
   const plainText = withoutFrontmatter
-    .replace(/```[\s\S]*?```/g, "") // fenced code blocks
-    .replace(/`[^`]*`/g, "") // inline code
-    .replace(/!\[.*?\]\(.*?\)/g, "") // images
-    .replace(/\[.*?\]\(.*?\)/g, "$1") // links → keep link text
-    .replace(/^#{1,6}\s+/gm, "") // headings
-    .replace(/[*_~]{1,3}([^*_~]+)[*_~]{1,3}/g, "$1") // bold/italic
-    .replace(/^\s*[-*+>|]\s*/gm, "") // lists, blockquotes, tables
-    .replace(/\s+/g, " ") // collapse whitespace
+    .replace(/```[\s\S]*?```/g, "") // 代码块
+    .replace(/`[^`]*`/g, "") // 行内代码
+    .replace(/!\[.*?\]\(.*?\)/g, "") // 图片
+    .replace(/\[.*?\]\(.*?\)/g, "$1") // 链接保留文字
+    .replace(/^#{1,6}\s+/gm, "") // 标题标记
+    .replace(/[*_~]{1,3}([^*_~]+)[*_~]{1,3}/g, "$1") // 粗体/斜体
+    .replace(/^\s*[-*+>|]\s*/gm, "") // 列表、引用、表格
+    .replace(/\s+/g, " ")
     .trim();
 
-  const wordCount = plainText.split(" ").filter(Boolean).length;
-  const minutes = Math.ceil(wordCount / wordsPerMinute);
+  const cjkPattern = /[\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff]/g;
+  const cjkCount = (plainText.match(cjkPattern) || []).length;
+  const latinCount = plainText
+    .replace(cjkPattern, " ")
+    .split(/\s+/)
+    .filter(Boolean).length;
 
-  return minutes < 1 ? "< 1 min read" : `${minutes} min read`;
+  const minutes = cjkCount / cjkCharsPerMinute + latinCount / wordsPerMinute;
+  return Math.max(1, Math.ceil(minutes));
 }

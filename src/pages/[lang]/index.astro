@@ -89,13 +89,17 @@ const recentPosts = sortedPosts.filter(({ data }) => !("featured" in data && dat
         <div class="mt-8 flex flex-col sm:flex-row sm:items-center gap-4">
           <p class="text-sm opacity-50 flex-shrink-0">
             {t("home.writtenBy")}
-            <LinkButton
-              class="font-medium underline decoration-dashed underline-offset-4 hover:text-accent"
-              href={SITE.profile}
-              target="_blank"
-            >
-              {t("site.author")}
-            </LinkButton>
+            {SITE.profile ? (
+              <LinkButton
+                class="font-medium underline decoration-dashed underline-offset-4 hover:text-accent"
+                href={SITE.profile}
+                target="_blank"
+              >
+                {t("site.author")}
+              </LinkButton>
+            ) : (
+              <span class="font-medium">{t("site.author")}</span>
+            )}
           </p>
 
           {
