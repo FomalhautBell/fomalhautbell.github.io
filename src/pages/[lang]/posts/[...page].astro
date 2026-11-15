@@ -11,6 +11,8 @@ import "@pagefind/default-ui/css/ui.css";
 import type { ContentEntry } from "@/utils/contentEntry";
 import getSortedPosts from "@/utils/getSortedPosts";
 import { SITE } from "@/config";
+import { LANGS } from "@/i18n/ui";
+import { getLangFromUrl, useTranslations, localizePath } from "@/i18n/utils";
 
 export const getStaticPaths = (async ({ paginate }) => {
   const [blogPosts, galleryPosts] = await Promise.all([
@@ -19,22 +21,25 @@ export const getStaticPaths = (async ({ paginate }) => {
       ? getCollection("galleries", ({ data }) => !data.draft)
       : Promise.resolve([]),
   ]);
-  return paginate(getSortedPosts([...blogPosts, ...galleryPosts]), {
-    pageSize: SITE.postPerPage,
-  });
+  const posts = getSortedPosts([...blogPosts, ...galleryPosts]);
+  return LANGS.flatMap(lang =>
+    paginate(posts, { params: { lang }, pageSize: SITE.postPerPage })
+  );
 }) satisfies GetStaticPaths;
 
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
 const { page } = Astro.props;
 const totalPosts = page.total;
 
 // Prevent duplicate metadata in pagination
 const metaTitle = page.currentPage > 1
-  ? `Posts (Page ${page.currentPage} of ${page.lastPage}) | ${SITE.title}`
-  : `Posts | ${SITE.title}`;
+  ? `${t("posts.title")} (${t("posts.pageOf", { current: page.currentPage, total: page.lastPage })}) | ${SITE.title}`
+  : `${t("posts.title")} | ${SITE.title}`;
 
 const metaDesc = page.currentPage > 1
-  ? `All published articles (Page ${page.currentPage} of ${page.lastPage}).`
-  : `All the articles I have published.`;
+  ? t("posts.metaDescPaged", { current: page.currentPage, total: page.lastPage })
+  : t("posts.metaDesc");
 
 const prevURL = page.url.prev ? new URL(page.url.prev, SITE.website).toString() : undefined;
 const nextURL = page.url.next ? new URL(page.url.next, SITE.website).toString() : undefined;
@@ -52,17 +57,17 @@ const nextURL = page.url.next ? new URL(page.url.next, SITE.website).toString() 
       <div class="aurora-mouse" data-posts-mouse></div>
       <div class="relative z-10">
         <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">
-          <span class="glow-text">Posts</span>
+          <span class="glow-text">{t("posts.title")}</span>
         </h1>
         <p class="mt-3 max-w-lg text-foreground/70 italic">
-          All the articles I have published.
+          {t("posts.metaDesc")}
         </p>
         <div class="mt-4 flex flex-wrap items-center gap-2">
-          <span class="hero-badge">{totalPosts} posts</span>
+          <span class="hero-badge">{t("posts.count", { count: totalPosts })}</span>
           {
             page.lastPage > 1 && (
               <span class="hero-badge">
-                Page {page.currentPage}/{page.lastPage}
+                {t("posts.pageOf", { current: page.currentPage, total: page.lastPage })}
               </span>
             )
           }
@@ -97,9 +102,9 @@ const nextURL = page.url.next ? new URL(page.url.next, SITE.website).toString() 
                 <line x1="9" y1="15" x2="15" y2="15"></line>
               </svg>
             </div>
-            <h3 class="empty-title">No posts yet</h3>
+            <h3 class="empty-title">{t("posts.empty")}</h3>
             <p class="empty-desc">
-              Come back later to read our upcoming articles.
+              {t("posts.emptyHint")}
             </p>
           </div>
         ) : (
@@ -173,10 +178,24 @@ const nextURL = page.url.next ? new URL(page.url.next, SITE.website).toString() 
         // Removed the early return to allow pagefind to attempt loading the local index
       }
 
+      const isZh = document.documentElement.lang.startsWith("zh");
+      const searchTranslations = isZh
+        ? {
+            placeholder: "搜索文章…",
+            clear_search: "清除",
+            load_more: "加载更多结果",
+            search_label: "搜索本站",
+            filters: "筛选",
+            zero_matches: "没有找到结果",
+            reset_filters: "重置筛选",
+          }
+        : undefined;
+
       new PagefindUI({
         element: "#posts-pagefind",
         showImages: false,
         showSubResults: true,
+        translations: searchTranslations,
       });
 
       // Toggle default posts grid visibility when typing

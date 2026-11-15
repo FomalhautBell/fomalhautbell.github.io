@@ -5,6 +5,10 @@
  * Includes visual elements like cursors glows, sparkles, and keyboard navigation.
  */
 import "@pagefind/default-ui/css/ui.css";
+import { getLangFromUrl, useTranslations } from "@/i18n/utils";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
 ---
 
 <!-- Search Modal Overlay -->
@@ -13,7 +17,7 @@ import "@pagefind/default-ui/css/ui.css";
   class="search-modal-overlay"
   role="dialog"
   aria-modal="true"
-  aria-label="Search the site"
+  aria-label={t("search.title")}
 >
   <div class="search-modal-backdrop" data-search-close></div>
   <div class="search-modal-container" data-modal-card>
@@ -53,19 +57,19 @@ import "@pagefind/default-ui/css/ui.css";
             <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
           </svg>
         </span>
-        <span class="search-title-text">Search</span>
+        <span class="search-title-text">{t("search.title")}</span>
       </div>
       <div class="search-modal-shortcuts">
         <kbd class="kbd-key">⌘</kbd>
         <kbd class="kbd-key">K</kbd>
         <span class="shortcuts-sep">·</span>
         <kbd class="kbd-key">esc</kbd>
-        <span class="shortcuts-label">close</span>
+        <span class="shortcuts-label">{lang === "zh-CN" ? "关闭" : "close"}</span>
       </div>
       <button
         class="search-modal-close"
         data-search-close
-        aria-label="Close search"
+        aria-label={t("common.close")}
       >
         <svg
           class="size-4"
@@ -102,7 +106,7 @@ import "@pagefind/default-ui/css/ui.css";
           </svg>
         </div>
         <p class="empty-text">
-          Type to search for articles, tutorials, and ideas...
+          {t("search.hintLong")}
         </p>
       </div>
     </div>
@@ -110,13 +114,13 @@ import "@pagefind/default-ui/css/ui.css";
     <!-- Footer -->
     <div class="search-modal-footer">
       <div class="footer-hint">
-        <span class="footer-icon">↵</span> open
+        <span class="footer-icon">↵</span> {t("search.open")}
       </div>
       <div class="footer-hint">
-        <span class="footer-icon">↑↓</span> navigate
+        <span class="footer-icon">↑↓</span> {t("search.navigate")}
       </div>
       <div class="footer-powered">
-        powered by <strong>pagefind</strong>
+        {t("search.poweredBy")} <strong>pagefind</strong>
       </div>
     </div>
   </div>
@@ -248,6 +252,19 @@ import "@pagefind/default-ui/css/ui.css";
         // Ensure Pagefind UI does not re-initialize on the same element
         if (container.querySelector(".pagefind-ui")) return;
 
+        const isZh = document.documentElement.lang.startsWith("zh");
+      const searchTranslations = isZh
+        ? {
+            placeholder: "搜索文章…",
+            clear_search: "清除",
+            load_more: "加载更多结果",
+            search_label: "搜索本站",
+            filters: "筛选",
+            zero_matches: "没有找到结果",
+            reset_filters: "重置筛选",
+          }
+        : undefined;
+
         // @ts-expect-error — Missing types for @pagefind/default-ui package.
         const { PagefindUI } = await import("@pagefind/default-ui");
 
@@ -258,6 +275,7 @@ import "@pagefind/default-ui/css/ui.css";
           element: "#modal-pagefind-search",
           showImages: false,
           showSubResults: true,
+          translations: searchTranslations,
         });
 
         // Hide empty state when user types

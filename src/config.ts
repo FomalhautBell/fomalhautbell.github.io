@@ -2,7 +2,7 @@ export const SITE = {
   website: "https://fomalhautbell.github.io/",
   author: "FomalhautBell",
   profile: process.env.PUBLIC_SOCIAL_GITHUB ?? "", // set in .env
-  desc: "Notes on software, systems, and whatever I happen to be figuring out.",
+  desc: "记录代码、系统，以及偶尔的跑题。",
   title: "FomalhautBell",
   ogImage: "og.webp", // located in the public folder
   lightAndDarkMode: true,
@@ -18,7 +18,7 @@ export const SITE = {
   indexPostsGrid: false, // show recent/featured posts in grid layout on the home page (like /posts page)
   heroTerminalPrompt: {
     prefix: "~", // highlighted part on the left
-    path: "/ready-to-go", // central prompt text
+    path: "/blog", // central prompt text
     suffix: "$", // terminal symbol on the right
   },
   backdropEffects: {
@@ -32,15 +32,6 @@ export const SITE = {
   },
   dynamicOgImage: true,
   dir: "ltr", // "rtl" | "auto"
-  lang: "en", // html lang code. Set this empty and default will be "en"
+  lang: "zh-CN", // 默认语言；页面实际语言由 URL 前缀决定
   timezone: "Asia/Shanghai", // Default global timezone (IANA format) https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
-  introAudio: {
-    enabled: true, // show/hide intro player in home and compact player while navigating
-    // src: path to file (relative to /public or absolute URL). Example: "/intro.mp3" or "https://example.com/stream"
-    src: "https://fluxfm.streamabc.net/flx-chillhop-mp3-128-8581707",
-    // src: "/audio/intro-web.mp3",
-    isStream: true, // true for radio/live stream URLs (example: https://fluxfm.streamabc.net/flx-chillhop-mp3-128-8581707)
-    label: "LOFI", // display label in player
-    duration: 30, // duration in seconds (used for local files, ignored on streams)
-  },
 } as const;

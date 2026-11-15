@@ -5,6 +5,7 @@
  * Provides two sizes: 'sm' (small, used in cards) and 'lg' (large, used in tag index).
  */
 import IconHash from "@/assets/icons/IconHash.svg";
+import { getLangFromUrl, localizePath } from "@/i18n/utils";
 
 type Props = {
   tag: string;
@@ -13,11 +14,12 @@ type Props = {
 };
 
 const { tag, tagName, size = "lg" } = Astro.props;
+const lang = getLangFromUrl(Astro.url);
 ---
 
 <li>
   <a
-    href={`/tags/${tag}/`}
+    href={localizePath(`/tags/${tag}/`, lang)}
     transition:name={tag}
     class:list={[
       "flex items-center gap-0.5",

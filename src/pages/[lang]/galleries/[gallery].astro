@@ -10,19 +10,23 @@ import Datetime from "@/components/Datetime.astro";
 import IconGallery from "@/assets/icons/IconGallery.svg";
 import { slugifyStr } from "@/utils/slugify";
 import { SITE } from "@/config";
+import { LANGS } from "@/i18n/ui";
 
 export async function getStaticPaths() {
   if (!SITE.showGalleries) return [];
 
   const galleries = await getCollection("galleries", ({ data }) => !data.draft);
-  return galleries.map(gallery => ({
-    params: {
-      gallery: gallery.id
-        .replace(/\/index\.(md|mdx)$/, "")
-        .replace(/\.(md|mdx)$/, ""),
-    },
-    props: { entry: gallery },
-  }));
+  return LANGS.flatMap(lang =>
+    galleries.map(gallery => ({
+      params: {
+        lang,
+        gallery: gallery.id
+          .replace(/\/index\.(md|mdx)$/, "")
+          .replace(/\.(md|mdx)$/, ""),
+      },
+      props: { entry: gallery },
+    }))
+  );
 }
 
 const { entry } = Astro.props;

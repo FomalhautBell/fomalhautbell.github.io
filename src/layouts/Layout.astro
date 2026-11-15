@@ -3,8 +3,13 @@ import { Font } from "astro:assets";
 import { ClientRouter } from "astro:transitions";
 import { PUBLIC_GOOGLE_SITE_VERIFICATION } from "astro:env/client";
 import { SITE } from "@/config";
+import { getLangFromUrl, useTranslations, switchLangPath } from "@/i18n/utils";
+import { LANGS } from "@/i18n/ui";
 import SearchModal from "@/components/SearchModal.astro";
 import "@/styles/global.css";
+
+const pageLang = getLangFromUrl(Astro.url);
+const t = useTranslations(pageLang);
 
 type Props = {
   title?: string;
@@ -25,7 +30,7 @@ const {
   title = SITE.title,
   author = SITE.author,
   profile = SITE.profile,
-  description = SITE.desc,
+  description = t("home.description"),
   ogImage = SITE.ogImage ? `/${SITE.ogImage}` : "/og.png",
   canonicalURL: canonicalURLProp,
   pubDatetime,
@@ -110,7 +115,7 @@ const showGrain = SITE.backdropEffects.grain;
 <!doctype html>
 <html
   dir={SITE.dir}
-  lang={`${SITE.lang ?? "en"}`}
+  lang={pageLang}
   class={`${scrollSmooth ? "scroll-smooth" : ""}`}
 >
   <head>
@@ -118,6 +123,16 @@ const showGrain = SITE.backdropEffects.grain;
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="canonical" href={canonicalURL} />
+    {
+      LANGS.some(l => Astro.url.pathname.startsWith(`/${l}/`)) &&
+        LANGS.map(l => (
+          <link
+            rel="alternate"
+            hreflang={l}
+            href={new URL(switchLangPath(Astro.url.pathname, l), SITE.website).href}
+          />
+        ))
+    }
     <meta name="generator" content={Astro.generator} />
 
     <!-- Relational Pagination Links -->

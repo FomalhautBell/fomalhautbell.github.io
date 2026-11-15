@@ -7,14 +7,26 @@ import IconSunHigh from "@/assets/icons/IconSunHigh.svg";
 import Logo from "@/assets/logo/wordmark.svg";
 import LinkButton from "./LinkButton.astro";
 import MobileMenu from "./MobileMenu.astro";
-import IntroAudioCompact from "./IntroAudioCompact.astro";
 import { SITE } from "@/config";
+import {
+  getLangFromUrl,
+  useTranslations,
+  localizePath,
+  switchLangPath,
+  stripLang,
+} from "@/i18n/utils";
+import { LANG_LABELS } from "@/i18n/ui";
 
 const { pathname } = Astro.url;
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const otherLang = lang === "zh-CN" ? "en" : "zh-CN";
+const switchHref = switchLangPath(pathname, otherLang);
 
-// Remove trailing slash from current pathname if exists
+// 去掉语言前缀，再处理尾斜杠，用于导航高亮判断
+const barePath = stripLang(pathname);
 const currentPath =
-  pathname.endsWith("/") && pathname !== "/" ? pathname.slice(0, -1) : pathname;
+  barePath.endsWith("/") && barePath !== "/" ? barePath.slice(0, -1) : barePath;
 
 const isActive = (path: string) => {
   const currentPathArray = currentPath.split("/").filter(p => p.trim());
@@ -29,7 +41,7 @@ const isActive = (path: string) => {
   href="#main-content"
   class="absolute start-16 -top-full z-50 rounded-b-lg bg-accent px-4 py-2 font-medium text-background transition-all focus:top-0"
 >
-  Skip to content
+  {t("nav.skipToContent")}
 </a>
 
 <header id="main-header" class="sticky top-0 z-40 w-full transition-colors duration-300">
@@ -46,27 +58,12 @@ const isActive = (path: string) => {
       >
         <!-- Logo -->
         <a
-          href="/"
+          href={localizePath("/", lang)}
           class="group relative z-20 flex items-center gap-2 text-xl font-bold tracking-tight sm:text-2xl shrink-0"
         >
-          <!-- <span class="nav-logo-text">{SITE.title}</span> -->
           <Logo class="w-37.5 dark:invert" />
         </a>
 
-        <!-- Center Audio Player -->
-        {
-          SITE.introAudio.enabled && (
-            <div class="flex-1 flex justify-center min-w-0">
-              <IntroAudioCompact
-                src={SITE.introAudio.src}
-                label={SITE.introAudio.label}
-                duration={SITE.introAudio.duration}
-                isStream={SITE.introAudio.isStream}
-                class="nav-intro-audio-compact"
-              />
-            </div>
-          )
-        }
 
         <!-- Nav area -->
         <nav id="nav-menu" class="flex items-center sm:gap-1 shrink-0">
@@ -89,46 +86,46 @@ const isActive = (path: string) => {
           <ul class="hidden sm:flex sm:flex-row sm:items-center sm:gap-1">
             <li>
               <a
-                href="/posts"
+                href={localizePath("/posts", lang)}
                 class:list={["nav-link", { "nav-active": isActive("/posts") }]}
-                >Posts</a
+                >{t("nav.posts")}</a
               >
             </li>
             <li>
               <a
-                href="/tags"
+                href={localizePath("/tags", lang)}
                 class:list={["nav-link", { "nav-active": isActive("/tags") }]}
-                >Tags</a
+                >{t("nav.tags")}</a
               >
             </li>
             <li>
               <a
-                href="/about"
+                href={localizePath("/about", lang)}
                 class:list={["nav-link", { "nav-active": isActive("/about") }]}
-                >About</a
+                >{t("nav.about")}</a
               >
             </li>
             <li class="flex items-center">
               <a
-                href="/search"
+                href={localizePath("/search", lang)}
                 class:list={["nav-link", { "nav-active": isActive("/search") }]}
-                title="Go to Search">Search</a
+                title={t("nav.search")}>{t("nav.search")}</a
               >
             </li>
             {
               SITE.showArchives && (
                 <li>
                   <LinkButton
-                    href="/archives"
+                    href={localizePath("/archives", lang)}
                     class:list={[
                       "nav-link",
                       { "nav-active": isActive("/archives") },
                     ]}
-                    title="Archives"
+                    title={t("nav.archives")}
                     aria-label="archives"
                   >
                     <IconArchive class="hidden sm:inline-block" />
-                    <span class="sm:sr-only">Archives</span>
+                    <span class="sm:sr-only">{t("nav.archives")}</span>
                   </LinkButton>
                 </li>
               )
@@ -137,20 +134,33 @@ const isActive = (path: string) => {
               SITE.showGalleries && (
                 <li>
                   <LinkButton
-                    href="/galleries"
+                    href={localizePath("/galleries", lang)}
                     class:list={[
                       "nav-link",
                       { "nav-active": isActive("/galleries") },
                     ]}
-                    title="Galleries"
+                    title={t("nav.galleries")}
                     aria-label="galleries"
                   >
                     <IconGallery class="hidden sm:inline-block" />
-                    <span class="sm:sr-only">Galleries</span>
+                    <span class="sm:sr-only">{t("nav.galleries")}</span>
                   </LinkButton>
                 </li>
               )
             }
+
+            <!-- 语言切换 -->
+            <li class="flex items-center">
+              <a
+                href={switchHref}
+                hreflang={otherLang}
+                class="nav-lang-btn font-firacode text-xs"
+                title={t("nav.language")}
+                aria-label={t("nav.language")}
+              >
+                {LANG_LABELS[otherLang]}
+              </a>
+            </li>
 
             <!-- Separator -->
             <li class="flex items-center px-1" aria-hidden="true">
@@ -161,7 +171,7 @@ const isActive = (path: string) => {
               <button
                 data-search-trigger
                 class="nav-search-btn"
-                title="Search (⌘K)"
+                title={t("nav.search")}
                 aria-label="Open search"
                 aria-keyshortcuts="Meta+K"
               >
@@ -190,7 +200,7 @@ const isActive = (path: string) => {
       </div>
     </div>
   </div>
-  <MobileMenu currentPath={currentPath} />
+  <MobileMenu currentPath={currentPath} lang={lang} />
 
   <!-- Bottom border with gradient -->
   <div
@@ -201,6 +211,21 @@ const isActive = (path: string) => {
 </header>
 
 <style>
+  .nav-lang-btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.55rem;
+    border-radius: 0.5rem;
+    border: 1px solid color-mix(in srgb, var(--border) 35%, transparent);
+    color: color-mix(in srgb, var(--foreground) 70%, transparent);
+    transition: all 0.2s ease;
+  }
+  .nav-lang-btn:hover {
+    color: var(--accent);
+    border-color: color-mix(in srgb, var(--accent) 55%, transparent);
+    background: color-mix(in srgb, var(--accent) 10%, transparent);
+  }
+
   /* ─── Header Glass & Scroll Physics ─── */
   #main-header {
     background: transparent;

@@ -2,6 +2,7 @@
 import type { CollectionEntry } from "astro:content";
 import IconEdit from "@/assets/icons/IconEdit.svg";
 import { SITE } from "@/config";
+import { getLangFromUrl, useTranslations } from "@/i18n/utils";
 
 type Props = {
   hideEditPost?: CollectionEntry<"blog">["data"]["hideEditPost"];
@@ -10,6 +11,8 @@ type Props = {
 };
 
 const { hideEditPost, post, class: className = "" } = Astro.props;
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
 
 const href = `${SITE.editPost.url}${post.filePath}`;
 const showEditPost =
@@ -28,7 +31,7 @@ const showEditPost =
       ]}
     >
       <IconEdit class="size-4.5 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:scale-110" />
-      <span class="font-firacode tracking-wide">{SITE.editPost.text}</span>
+      <span class="font-firacode tracking-wide">{t("post.edit")}</span>
     </a>
   )
 }

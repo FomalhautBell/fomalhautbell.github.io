@@ -6,6 +6,8 @@ export type BreadcrumbItem = {
 type BuildBreadcrumbOptions = {
   locale?: string;
   compactNumericPagination?: boolean;
+  /** 路径段 → 显示名称的映射，用于本地化 */
+  labels?: Record<string, string>;
 };
 
 const isNumericSegment = (value?: string) =>
@@ -38,10 +40,11 @@ export const getPathSegments = (pathname: string) =>
 
 const buildDefaultBreadcrumbItems = (
   segments: string[],
-  locale?: string
+  locale?: string,
+  labels?: Record<string, string>
 ): BreadcrumbItem[] =>
   segments.map((segment, index) => ({
-    label: formatPathSegmentLabel(segment, locale),
+    label: labels?.[segment] ?? formatPathSegmentLabel(segment, locale),
     href:
       index === segments.length - 1
         ? null
@@ -77,8 +80,11 @@ export const buildBreadcrumbItems = (
   pathname: string,
   options: BuildBreadcrumbOptions = {}
 ): BreadcrumbItem[] => {
-  const { locale, compactNumericPagination: shouldCompactPagination = true } =
-    options;
+  const {
+    locale,
+    labels,
+    compactNumericPagination: shouldCompactPagination = true,
+  } = options;
 
   const segments = getPathSegments(pathname);
   if (segments.length === 0) return [];
@@ -86,10 +92,14 @@ export const buildBreadcrumbItems = (
   if (shouldCompactPagination && isNumericSegment(segments.at(-1))) {
     const pageSegment = segments.at(-1) as string;
     const parentSegments = segments.slice(0, -1);
-    const parentItems = buildDefaultBreadcrumbItems(parentSegments, locale);
+    const parentItems = buildDefaultBreadcrumbItems(
+      parentSegments,
+      locale,
+      labels
+    );
 
     return compactPagination(parentItems, pageSegment);
   }
 
-  return buildDefaultBreadcrumbItems(segments, locale);
+  return buildDefaultBreadcrumbItems(segments, locale, labels);
 };

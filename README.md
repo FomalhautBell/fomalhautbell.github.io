@@ -22,6 +22,28 @@ pnpm build      # outputs to dist/
 pnpm preview    # serve the built site locally
 ```
 
+## Languages
+
+The site is bilingual. Pages live under a locale prefix and a single page file
+renders both languages via `getStaticPaths`:
+
+- `/zh-CN/…` — 中文（默认，`/` 会重定向到这里）
+- `/en/…` — English
+
+UI strings live in `src/i18n/ui.ts` (one object per locale, flat keys). Helpers in
+`src/i18n/utils.ts`: `getLangFromUrl`, `useTranslations`, `localizePath`,
+`switchLangPath`. In a page or component:
+
+```astro
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+---
+<a href={localizePath("/posts", lang)}>{t("nav.posts")}</a>
+```
+
+To add a locale: extend `LANGS` and `ui` in `src/i18n/ui.ts`, then add the label to
+`LANG_LABELS`. Any `getStaticPaths` that maps over `LANGS` picks it up automatically.
+
 ## Writing posts
 
 Posts live in `src/data/blog/` as Markdown or MDX. Minimum frontmatter:

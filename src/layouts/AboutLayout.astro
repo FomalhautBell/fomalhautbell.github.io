@@ -1,19 +1,21 @@
 ---
-import type { MarkdownLayoutProps } from "astro";
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
 import Breadcrumb from "@/components/Breadcrumb.astro";
 import Layout from "./Layout.astro";
 import { SITE } from "@/config";
+import { getLangFromUrl, useTranslations } from "@/i18n/utils";
 
-type Props = MarkdownLayoutProps<{ title: string; description?: string }>;
+type Props = { title: string; description?: string };
 
-const { frontmatter } = Astro.props;
+const { title, description } = Astro.props;
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
 ---
 
 <Layout
-  title={`${frontmatter.title} | ${SITE.title}`}
-  description={frontmatter.description}
+  title={`${title} | ${SITE.title}`}
+  description={description}
 >
   <Header />
   <Breadcrumb />
@@ -32,14 +34,9 @@ const { frontmatter } = Astro.props;
           </div>
         </div>
         <h1 class="hero-title">
-          <span class="greeting">Hi! I'm</span>
+          <span class="greeting">{lang === "zh-CN" ? "你好，我是" : "Hi, I'm"}</span>
           <span class="name-glow">{SITE.author}</span>
         </h1>
-        <div class="hero-badges">
-          <span class="badge" data-badge>🚀 Developer</span>
-          <span class="badge" data-badge>📚 Student</span>
-          <span class="badge" data-badge>🎮 Gamer</span>
-        </div>
       </div>
     </div>
 

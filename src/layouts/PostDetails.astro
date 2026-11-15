@@ -13,6 +13,7 @@ import { getPath } from "@/utils/getPath";
 import { slugifyStr } from "@/utils/slugify";
 import { getReadingTime } from "@/utils/readingTime";
 import { SITE } from "@/config";
+import { getLangFromUrl, useTranslations, localizePath } from "@/i18n/utils";
 
 type Props = {
   post: CollectionEntry<"blog">;
@@ -20,6 +21,9 @@ type Props = {
 };
 
 const { post, posts } = Astro.props;
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
 
 const {
   title,
@@ -107,7 +111,7 @@ const nextPost =
           {
             tags.map((tag: string) => (
               <a
-                href={`/tags/${slugifyStr(tag)}/`}
+                href={localizePath(`/tags/${slugifyStr(tag)}/`, lang)}
                 class="post-tag-badge inline-flex items-center gap-1 rounded-full border border-accent/20 bg-accent/5 px-2.5 py-0.5 font-firacode text-xs text-accent transition-all duration-200 hover:border-accent/40 hover:bg-accent/10 hover:shadow-sm hover:shadow-accent/10"
               >
                 <span class="opacity-50">#</span>
@@ -233,7 +237,7 @@ const nextPost =
         {
           tags.map((tag: string) => (
             <a
-              href={`/tags/${slugifyStr(tag)}/`}
+              href={localizePath(`/tags/${slugifyStr(tag)}/`, lang)}
               tabindex="-1"
               class="inline-flex items-center gap-1 rounded-full border border-border/25 bg-muted/10 px-2.5 py-1 font-firacode text-xs transition-all duration-200 hover:border-accent/40 hover:bg-accent/5 hover:text-accent"
             >
@@ -261,7 +265,7 @@ const nextPost =
       {
         prevPost ? (
           <a
-            href={getPath(prevPost.id, prevPost.filePath)}
+            href={localizePath(getPath(prevPost.id, prevPost.filePath), lang)}
             class="post-nav-link group relative flex flex-col gap-1 rounded-2xl border border-border/20 px-5 py-4 transition-all duration-300 hover:border-accent/30 hover:shadow-lg hover:shadow-accent/5"
           >
             <div class="post-nav-bg" />
@@ -279,7 +283,7 @@ const nextPost =
                 <polyline points="12 19 5 12 12 5" />
               </svg>
               <span class="font-firacode text-[10px] tracking-wider text-foreground/35 uppercase">
-                Previous
+                {t("pagination.prev")}
               </span>
             </div>
             <span class="line-clamp-2 text-sm leading-snug font-medium text-foreground/70 transition-colors duration-200 group-hover:text-accent">
@@ -293,13 +297,13 @@ const nextPost =
       {
         nextPost && (
           <a
-            href={getPath(nextPost.id, nextPost.filePath)}
+            href={localizePath(getPath(nextPost.id, nextPost.filePath), lang)}
             class="post-nav-link group relative col-start-2 flex flex-col items-end gap-1 rounded-2xl border border-border/20 px-5 py-4 text-end transition-all duration-300 hover:border-accent/30 hover:shadow-lg hover:shadow-accent/5"
           >
             <div class="post-nav-bg" />
             <div class="flex items-center gap-1.5">
               <span class="font-firacode text-[10px] tracking-wider text-foreground/35 uppercase">
-                Next
+                {t("pagination.next")}
               </span>
               <svg
                 class="size-3.5 text-accent/50 transition-transform duration-300 group-hover:translate-x-1 rtl:rotate-180"

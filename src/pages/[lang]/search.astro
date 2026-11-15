@@ -1,4 +1,10 @@
 ---
+import { LANGS } from "@/i18n/ui";
+import { getLangFromUrl, useTranslations, localizePath } from "@/i18n/utils";
+
+export function getStaticPaths() {
+  return LANGS.map(lang => ({ params: { lang } }));
+}
 import "@pagefind/default-ui/css/ui.css";
 import Layout from "@/layouts/Layout.astro";
 import Header from "@/components/Header.astro";
@@ -6,10 +12,12 @@ import Footer from "@/components/Footer.astro";
 import Breadcrumb from "@/components/Breadcrumb.astro";
 import { SITE } from "@/config";
 
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
 const backUrl = SITE.showBackButton ? `${Astro.url.pathname}` : "/";
 ---
 
-<Layout title={`Search | ${SITE.title}`}>
+<Layout title={`${t("search.title")} | ${SITE.title}`}>
   <Header />
   <Breadcrumb />
   <main id="main-content" class="app-layout pb-12">
@@ -21,10 +29,10 @@ const backUrl = SITE.showBackButton ? `${Astro.url.pathname}` : "/";
       <div class="aurora-mouse" data-search-mouse></div>
       <div class="relative z-10">
         <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">
-          <span class="glow-text">Search</span>
+          <span class="glow-text">{t("search.title")}</span>
         </h1>
         <p class="mt-3 max-w-lg text-foreground/70 italic">
-          Find any article, tutorial, or idea on the blog.
+          {t("search.subtitle")}
         </p>
       </div>
     </div>
@@ -143,10 +151,24 @@ const backUrl = SITE.showBackButton ? `${Astro.url.pathname}` : "/";
           `;
       }
 
+      const isZh = document.documentElement.lang.startsWith("zh");
+      const searchTranslations = isZh
+        ? {
+            placeholder: "搜索文章…",
+            clear_search: "清除",
+            load_more: "加载更多结果",
+            search_label: "搜索本站",
+            filters: "筛选",
+            zero_matches: "没有找到结果",
+            reset_filters: "重置筛选",
+          }
+        : undefined;
+
       const search = new PagefindUI({
         element: "#pagefind-search",
         showImages: false,
         showSubResults: true,
+        translations: searchTranslations,
         processTerm: function (term: string) {
           params.set("q", term);
           history.replaceState(history.state, "", "?" + params.toString());

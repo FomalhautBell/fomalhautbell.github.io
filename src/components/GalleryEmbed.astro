@@ -1,4 +1,5 @@
 ---
+import { getLangFromUrl, localizePath } from "@/i18n/utils";
 /**
  * GalleryEmbed — renders an inline grid of a gallery inside an MDX post.
  *
@@ -22,6 +23,7 @@ type Props = {
   cols?: 2 | 3 | 4;
 };
 
+const lang = getLangFromUrl(Astro.url);
 const { slug, limit = 6, showLink = true, cols = 3 } = Astro.props;
 
 // ── 1. Find the collection entry by slug ────────────────────────────
@@ -156,7 +158,7 @@ const gridClass = {
           <span class="ge-desc">{entry.data.description}</span>
         )}
         {showLink && (
-          <a href={`/galleries/${slug}`} class="ge-link">
+          <a href={localizePath(`/galleries/${slug}`, lang)} class="ge-link">
             View full gallery
             <svg
               xmlns="http://www.w3.org/2000/svg"

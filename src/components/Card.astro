@@ -9,6 +9,7 @@ import Datetime from "./Datetime.astro";
 import IconGallery from "@/assets/icons/IconGallery.svg";
 import IconClock from "@/assets/icons/IconClock.svg";
 import { SITE } from "@/config";
+import { getLangFromUrl, useTranslations, localizePath } from "@/i18n/utils";
 
 type Props = {
   variant?: "h2" | "h3";
@@ -33,7 +34,8 @@ const { title, description, pubDatetime } = data;
 const modDatetime = "modDatetime" in data ? data.modDatetime : null;
 const timezone = "timezone" in data ? data.timezone : undefined;
 const tags = "tags" in data ? data.tags : [];
-const href = getEntryPath({ collection, id, filePath });
+const lang = getLangFromUrl(Astro.url);
+const href = localizePath(getEntryPath({ collection, id, filePath }), lang);
 const isGallery = collection === "galleries";
 const headingId = `${collection}-${slugifyStr(String(id))}-title`;
 const descriptionId = `${collection}-${slugifyStr(String(id))}-description`;
@@ -213,7 +215,7 @@ if (SITE.showCoverImages) {
         {tags.slice(0, 4).map((tag: string) => (
           <li>
             <a
-              href={`/tags/${slugifyStr(tag)}/`}
+              href={localizePath(`/tags/${slugifyStr(tag)}/`, lang)}
               class:list={[
                 "inline-flex items-center gap-0.5 rounded-full px-2.5 py-0.5",
                 "text-xs font-medium",

@@ -4,6 +4,8 @@ import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import IconCalendar from "@/assets/icons/IconCalendar.svg";
 import { SITE } from "@/config";
+import { getLangFromUrl, useTranslations } from "@/i18n/utils";
+import "dayjs/locale/zh-cn";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -25,7 +27,9 @@ const {
 } = Astro.props;
 
 /* ========== Formatted Datetime ========== */
-const locale = SITE.lang || "en";
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const locale = lang;
 const localeCode = locale.toLowerCase().split("-")[0] || "en";
 const resolvedTimezone = postTimezone || SITE.timezone;
 
@@ -40,16 +44,19 @@ const isModified = Boolean(
 
 const datetime = isModified && modifiedDatetime ? modifiedDatetime : publishedDatetime;
 
-const date = datetime.locale(localeCode).format("D MMM, YYYY");
+const date =
+  locale === "zh-CN"
+    ? datetime.locale("zh-cn").format("YYYY年M月D日")
+    : datetime.locale(localeCode).format("D MMM, YYYY");
 
 const srDate = new Intl.DateTimeFormat(locale, {
   dateStyle: "long",
   timeZone: resolvedTimezone,
 }).format(datetime.toDate());
 
-const updatedText = "Updated:";
-const publishedText = "Published date";
-const updatedSrText = "Updated date";
+const updatedText = `${t("post.updated")}:`;
+const publishedText = t("post.published");
+const updatedSrText = t("post.updated");
 const srLabel = isModified ? updatedSrText : publishedText;
 ---
 
