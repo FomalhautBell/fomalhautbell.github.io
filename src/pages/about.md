@@ -1,29 +1,23 @@
 ---
 layout: ../layouts/AboutLayout.astro
 title: "About"
-description: "Get to know Andrés, the web developer, student, and gamer behind Astro Devosfera."
+description: "What this site is and what gets written here."
 ---
 
-Welcome to my digital corner. I am a **developer** and **student** passionate about technology, video games, and building things that live on the internet.
+A personal notebook on the web: software, systems, and the occasional detour into something unrelated.
 
-## Who am I?
+## What this is
 
-My name is Andrés, and since I can remember, I have always been curious about understanding how things work — from taking apart toys as a child to taking apart other people's code at 2 AM. I am currently studying engineering while developing projects that challenge me to learn something new every day.
+Somewhere to write things down properly instead of leaving them in scattered notes. Posts are mostly about programming, tooling, and the parts of computing that reward a closer look.
 
-When I am not programming, I am probably in some virtual world exploring maps, completing missions, or competing online. Video games are not just my hobby, they also taught me how to solve problems, work in a team, and, above all, not to give up after attempt #847.
+## What gets written
 
-## What I do
+- **Engineering notes** — things learned while building, usually the hard way.
+- **Tooling** — editors, terminals, languages, and the small improvements that compound.
+- **Longer reflections** — the occasional essay when a topic deserves more than a snippet.
 
-- **Web Development** — I love building modern web experiences with technologies like Astro, React, TypeScript, and everything the JavaScript ecosystem has to offer.
-- **Open Source** — I believe in the power of open source. You can find my projects on [GitHub](https://github.com/0xdres/).
-- **Continuous Learning** — I am always exploring new tools, frameworks, and concepts. Technology evolves fast and I like to keep up with the pace.
+## Colophon
 
-## Gaming
+Built with [Astro](https://astro.build/) on a theme derived from [AstroPaper](https://github.com/satnaing/astro-paper), heavily customized. Typography is set in a monospace face, the palette is warm and low-contrast, and the whole thing ships as static files.
 
-Video games are part of my DNA. From epic RPGs to competitive shooters, I enjoy practically any genre. It's that space where creativity meets strategy and pure fun.
-
-## This blog
-
-**Devosfera** was born as a space to document my journey as a developer, share what I learn, and connect with people who share the same passions. Here you will find posts about development, technology, and the occasional random late-night reflection.
-
-> _"Code is poetry, but with more semicolons."_ — Me, probably
+No analytics, no trackers, no newsletter pop-ups.
