@@ -28,6 +28,8 @@ export default defineConfig({
     }),
   ],
   markdown: {
+    // 关掉，否则中文里的「......」会被折叠成单个「…」
+    smartypants: false,
     remarkPlugins: [remarkToc, [remarkCollapse, { test: "Table of contents" }]],
     shikiConfig: {
       // For more themes, visit https://shiki.style/themes
