@@ -9,7 +9,6 @@ import Socials from "@/components/Socials.astro";
 import LinkButton from "@/components/LinkButton.astro";
 import Card from "@/components/Card.astro";
 import getSortedPosts from "@/utils/getSortedPosts";
-import IconRss from "@/assets/icons/IconRss.svg";
 import IconArrowRight from "@/assets/icons/IconArrowRight.svg";
 import { SITE } from "@/config";
 import { SOCIALS } from "@/constants";
@@ -39,40 +38,12 @@ const recentPosts = sortedPosts.filter(({ data }) => !("featured" in data && dat
       class="hero-section relative pt-10 pb-14 sm:pt-14 sm:pb-20"
     >
       <div class="relative z-10">
-        <!-- Terminal prompt badge -->
-        <div
-          class="mb-3 inline-flex items-center gap-2 rounded-full border border-border/40 bg-muted/20 px-3.5 py-1.5 font-firacode text-xs sm:text-sm"
-        >
-          <span class="relative flex h-2 w-2">
-            <span
-              class="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-60"
-            ></span>
-            <span class="relative inline-flex h-2 w-2 rounded-full bg-accent"
-            ></span>
-          </span>
-            <span class="text-accent">{SITE.heroTerminalPrompt.prefix}</span>
-            {SITE.heroTerminalPrompt.path}
-            <span class="opacity-40">{SITE.heroTerminalPrompt.suffix}</span>
-        </div>
 
         <!-- Title -->
         <h1
           class="hero-title mb-3 text-5xl leading-[1.1] font-bold tracking-tight sm:text-6xl lg:text-7xl"
         >
           {t("site.title")}
-          <a
-            target="_blank"
-            href="/rss.xml"
-            class="ml-1 inline-block align-middle"
-            aria-label="RSS Feed"
-            title="RSS Feed"
-          >
-            <IconRss
-              width={22}
-              height={22}
-              class="stroke-accent stroke-3 opacity-40 transition-opacity duration-300 hover:opacity-100"
-            />
-          </a>
         </h1>
 
 
