@@ -1,0 +1,77 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
+import Breadcrumb from "@/components/Breadcrumb.astro";
+import IconArrowRight from "@/assets/icons/IconArrowRight.svg";
+import { SITE } from "@/config";
+import { getLangFromUrl, useTranslations } from "@/i18n/utils";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+/**
+ * 活动是纯静态页面，不建 collection、不做筛选。
+ * 新增活动就在这个数组里加一条，页面文件放到 public/activities/ 下。
+ */
+const activities = [
+  {
+    title: "2026 百合会萌战 · 32 强预测问卷",
+    description:
+      "为每个分组选出你认为会晋级的角色，右侧自动生成「1.角色名」格式的名单，复制到论坛预测帖回复即可。选择只保存在本地浏览器。",
+    href: "/activities/baihe-moe-2026-prediction.html",
+    meta: "32 组 · 11 月 17 日 20:00 截止",
+    tags: ["问卷", "百合会"],
+    newTab: true,
+  },
+];
+---
+
+<Layout title={`${t("nav.activities")} | ${SITE.title}`} description={t("activities.desc")}>
+  <Header />
+  <Breadcrumb />
+  <main id="main-content" class="app-layout pb-16">
+    <div class="mt-6 mb-10">
+      <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">
+        <span class="glow-text">{t("nav.activities")}</span>
+      </h1>
+      <p class="mt-3 max-w-lg text-foreground/70">{t("activities.desc")}</p>
+    </div>
+
+    <ul class="grid gap-5 sm:grid-cols-2" role="list">
+      {
+        activities.map(activity => (
+          <li>
+            <a
+              href={activity.href}
+              target={activity.newTab ? "_blank" : undefined}
+              rel={activity.newTab ? "noopener noreferrer" : undefined}
+              class="group relative flex h-full min-h-full flex-col items-start gap-0 text-left rounded-2xl border border-border/25 bg-linear-to-br from-accent/5 via-muted/10 to-transparent p-6 transition-all duration-300 hover:-translate-y-0.5 hover:border-accent/40 hover:shadow-lg hover:shadow-accent/5 no-underline"
+            >
+              <h2 class="text-lg font-bold text-foreground transition-colors duration-200 group-hover:text-accent">
+                {activity.title}
+              </h2>
+              <p class="mt-2 flex-1 text-sm leading-relaxed text-foreground/65">
+                {activity.description}
+              </p>
+              <div class="mt-4 flex flex-wrap items-center gap-2">
+                {activity.tags.map(tag => (
+                  <span class="rounded-full border border-accent/20 bg-accent/5 px-2.5 py-0.5 font-firacode text-[11px] text-accent">
+                    #{tag}
+                  </span>
+                ))}
+              </div>
+              <div class="mt-4 flex items-center justify-between gap-3 border-t border-border/20 pt-3">
+                <span class="font-firacode text-[11px] text-foreground/45">
+                  {activity.meta}
+                </span>
+                <IconArrowRight class="size-4 text-accent/60 transition-transform duration-300 group-hover:translate-x-0.5" />
+              </div>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </main>
+  <Footer />
+</Layout>

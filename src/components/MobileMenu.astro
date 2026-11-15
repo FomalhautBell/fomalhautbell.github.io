@@ -86,6 +86,17 @@ const isActive = (path: string) => {
               </a>
             )
           }
+          <a
+            href={localizePath("/activities", lang)}
+            class:list={[
+              "mobile-nav-link",
+              { active: isActive("/activities") },
+            ]}
+            style="--i:5"
+          >
+            <span class="mobile-nav-indicator" />
+            <span>{t("nav.activities")}</span>
+          </a>
         </nav>
 
         <!-- Divider -->

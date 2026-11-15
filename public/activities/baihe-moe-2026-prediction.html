@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>百合会萌战预测问卷</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600;700&display=swap" rel="stylesheet">
+<style>
+/* layout: 左侧 32 个分组卡片，右侧固定的名单输出栏；手机上名单在最后，底部常驻复制栏 */
+:root {
+  --paper: #fbf7fa;
+  --surface: #ffffff;
+  --ink: #2a1f2d;
+  --muted: #6f6272;
+  --line: #e6d9e4;
+  --accent: #a8325e;
+  --accent-ink: #ffffff;
+  --accent-soft: #f6e4ec;
+  --display: "Noto Serif SC", "Songti SC", "SimSun", serif;
+  --body: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #181119;
+    --surface: #231a25;
+    --ink: #f1e8f2;
+    --muted: #a898ab;
+    --line: #3a2d3d;
+    --accent: #e27aa3;
+    --accent-ink: #2a0f1b;
+    --accent-soft: #3a2230;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #181119;
+  --surface: #231a25;
+  --ink: #f1e8f2;
+  --muted: #a898ab;
+  --line: #3a2d3d;
+  --accent: #e27aa3;
+  --accent-ink: #2a0f1b;
+  --accent-soft: #3a2230;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { scroll-padding-top: 16px; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--body);
+  line-height: 1.6;
+  -webkit-text-size-adjust: 100%;
+}
+button, input, textarea { font: inherit; color: inherit; }
+a { color: var(--accent); }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+.wrap { max-width: 1180px; margin: 0 auto; padding: 28px 16px 110px; }
+
+/* header */
+h1 {
+  font-family: var(--display);
+  font-size: clamp(26px, 4.4vw, 40px);
+  line-height: 1.2;
+  margin: 0 0 8px;
+  text-wrap: balance;
+}
+.lede { margin: 0 0 20px; color: var(--muted); max-width: 62ch; }
+.intro { display: grid; gap: 16px; margin-bottom: 28px; }
+@media (min-width: 760px) { .intro { grid-template-columns: 1fr 1fr; align-items: start; } }
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 16px 18px;
+}
+.panel h2 { font-size: 15px; margin: 0 0 8px; }
+.rules { margin: 0; padding-left: 1.2em; font-size: 14.5px; }
+.rules li + li { margin-top: 4px; }
+.rules strong { color: var(--accent); }
+
+.strip-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-bottom: 10px; }
+.strip-head h2 { margin: 0; }
+.strip-head span { font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.strip { display: grid; grid-template-columns: repeat(8, 1fr); gap: 5px; }
+@media (min-width: 480px) { .strip { grid-template-columns: repeat(16, 1fr); } }
+.cell {
+  border: 1px solid var(--line);
+  background: transparent;
+  border-radius: 6px;
+  padding: 4px 0;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  color: var(--muted);
+  cursor: pointer;
+}
+.cell.done { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); font-weight: 700; }
+.cell:hover { border-color: var(--accent); }
+.strip-note { margin: 10px 0 0; font-size: 12.5px; color: var(--muted); }
+
+/* tools row */
+.tools { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 14px; }
+.search {
+  flex: 1 1 220px;
+  min-width: 0;
+  padding: 9px 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+}
+.search::placeholder { color: var(--muted); }
+.btn {
+  border: 1px solid var(--line);
+  background: var(--surface);
+  border-radius: 8px;
+  padding: 9px 14px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.btn:hover:not(:disabled) { border-color: var(--accent); }
+.btn:disabled { opacity: .55; cursor: default; }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); font-weight: 700; }
+.btn.primary:hover { filter: brightness(1.06); }
+
+/* main layout */
+.layout { display: grid; gap: 24px; grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 960px) {
+  .layout { grid-template-columns: minmax(0, 1fr) 330px; align-items: start; }
+}
+
+.groups { display: grid; gap: 14px; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); }
+.group {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.group.flash { outline: 3px solid var(--accent); outline-offset: 2px; }
+.group-head { display: flex; justify-content: space-between; align-items: baseline; padding: 0 2px; }
+.group-head b { font-family: var(--display); font-size: 16px; }
+.group-head span { font-size: 12.5px; color: var(--muted); }
+.group.has-pick .group-head span { color: var(--accent); font-weight: 500; }
+
+.opt {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  text-align: left;
+  padding: 9px 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: transparent;
+  cursor: pointer;
+}
+.opt:hover { border-color: var(--accent); background: var(--accent-soft); }
+.opt .txt { flex: 1; min-width: 0; }
+.opt .nm { display: block; font-weight: 700; overflow-wrap: anywhere; }
+.opt .wk { display: block; font-size: 12.5px; color: var(--muted); line-height: 1.4; overflow-wrap: anywhere; }
+.opt svg { flex: none; width: 20px; height: 20px; }
+.opt svg circle { fill: none; stroke: var(--line); stroke-width: 2; }
+.opt svg path { fill: none; stroke: var(--accent-ink); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; opacity: 0; }
+.opt.on { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.opt.on:hover { background: var(--accent); }
+.opt.on .wk { color: inherit; opacity: .88; }
+.opt.on svg circle { fill: var(--accent-ink); stroke: var(--accent-ink); }
+.opt.on svg path { opacity: 1; stroke: var(--accent); }
+.empty { padding: 28px 8px; color: var(--muted); text-align: center; }
+
+/* output */
+.out {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+@media (min-width: 960px) {
+  .out { position: sticky; top: 16px; max-height: calc(100vh - 32px); }
+}
+.out-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+.out-head h2 { font-size: 16px; margin: 0; font-family: var(--display); }
+.out-head span { font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.list {
+  width: 100%;
+  min-height: 240px;
+  flex: 1 1 auto;
+  resize: none;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--paper);
+  padding: 10px 12px;
+  line-height: 1.5;
+  font-size: 14.5px;
+  font-variant-numeric: tabular-nums;
+}
+@media (min-width: 960px) { .list { flex: 1 1 0; } }
+.out-actions { display: flex; gap: 8px; }
+.out-actions .primary { flex: 1; }
+.out-hint { margin: 0; font-size: 12.5px; color: var(--muted); }
+
+/* mobile bar */
+.bar {
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 16px;
+  background: var(--surface);
+  border-top: 1px solid var(--line);
+}
+.bar span { font-size: 14px; font-variant-numeric: tabular-nums; }
+@media (min-width: 960px) { .bar { display: none; } .wrap { padding-bottom: 40px; } }
+
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 76px;
+  transform: translateX(-50%);
+  z-index: 6;
+  max-width: calc(100% - 32px);
+  padding: 9px 16px;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--paper);
+  font-size: 14px;
+  text-align: center;
+}
+@media (min-width: 960px) { .toast { bottom: 28px; } }
+
+.foot { margin-top: 28px; font-size: 12.5px; color: var(--muted); }
+
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>2026 百合会萌战 · 32强预测问卷</h1>
+    <p class="lede">每个分组选出你认为会晋级的 1 位角色，右侧会自动生成「1.角色名」格式的名单，复制后到论坛预测帖里回复即可。</p>
+  </header>
+
+  <section class="intro">
+    <div class="panel">
+      <h2>本场规则</h2>
+      <ul class="rules">
+        <li>预测 32 个分组各自的晋级者，每正确预测 1 位 <strong>+1 分</strong>。</li>
+        <li>预测截止 <strong>11 月 17 日 20:00</strong>，正式开赛后锁帖。</li>
+        <li>一人仅可参与一次预测，以该楼最后发布或编辑时间为准。</li>
+        <li>分组原帖：<a href="https://bbs.yamibo.com/thread-579038-1-1.html" target="_blank" rel="noopener">第二轮投票分组</a></li>
+      </ul>
+    </div>
+    <div class="panel">
+      <div class="strip-head"><h2>选择进度</h2><span id="stripCount">0 / 32</span></div>
+      <div class="strip" id="strip"></div>
+      <p class="strip-note">点格子可跳到对应分组，填色表示已选。</p>
+    </div>
+  </section>
+
+  <div class="layout">
+    <main>
+      <div class="tools">
+        <input class="search" id="search" type="search" placeholder="搜索角色名或作品名" aria-label="搜索角色名或作品名" autocomplete="off">
+        <button class="btn" id="jump" type="button">跳到第一个未选分组</button>
+      </div>
+      <div class="groups" id="groups"></div>
+      <p class="empty" id="empty" hidden>没有匹配的角色，换个关键词试试。</p>
+    </main>
+
+    <aside class="out" aria-label="生成的预测名单">
+      <div class="out-head"><h2>你的预测名单</h2><span id="count">已选 0 / 32</span></div>
+      <textarea class="list" id="list" rows="32" readonly aria-label="预测名单" spellcheck="false"></textarea>
+      <div class="out-actions">
+        <button class="btn primary" id="copy" type="button">复制名单</button>
+        <button class="btn" id="clear" type="button">清空选择</button>
+      </div>
+      <p class="out-hint">编号对应分组编号，未选的分组保留空行，也可以直接粘贴后在帖子里补全。</p>
+    </aside>
+  </div>
+
+  <p class="foot">本页只负责生成名单，不会提交到任何地方；选择只保存在你当前的浏览器里。</p>
+</div>
+
+<div class="bar">
+  <span id="count2">已选 0 / 32</span>
+  <button class="btn primary" id="copy2" type="button">复制名单</button>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+<script>
+const DATA = [{"group": 1, "chars": [{"name": "游佐茜", "work": "上伊那牡丹，醉姿如百合"}, {"name": "茵可·利斯克拉夫特", "work": "「凭妳也想讨伐魔王？」被勇者小队逐出队伍，只好在王都自在过活"}, {"name": "乙宗梢", "work": "剧场版 LoveLive!莲之空女学院学园偶像俱乐部 Bloom Garden Party"}]}, {"group": 2, "chars": [{"name": "近江汐莉", "work": "对我垂涎欲滴的非人少女"}, {"name": "佐藤枫", "work": "这里是充满笑容的职场。"}, {"name": "源樱", "work": "佐贺偶像是传奇 梦幻银河乐园"}]}, {"group": 3, "chars": [{"name": "小柳香穗", "work": "我们不可能成为恋人！绝对不行。（※好像也不是不行！？）～NextShine！～"}, {"name": "朝香果林", "work": "电影 LoveLive!虹咲学园学园偶像同好会 完结篇 第2章"}, {"name": "上原步梦", "work": "电影 LoveLive!虹咲学园学园偶像同好会 完结篇 第2章"}]}, {"group": 4, "chars": [{"name": "仲町阿拉蕾", "work": "BanG Dream! YUME∞MITA"}, {"name": "八神疾风", "work": "魔法少女奈叶 EXCEEDS Gun Blaze Vengeance"}, {"name": "吾野伊万里", "work": "Grow Up Show ～向日葵马戏团～"}]}, {"group": 5, "chars": [{"name": "深月绫", "work": "感谢对战。 ～大小姐才不玩格斗游戏～"}, {"name": "中须霞", "work": "电影 LoveLive!虹咲学园学园偶像同好会 完结篇 第2章"}, {"name": "天王寺璃奈", "work": "电影 LoveLive!虹咲学园学园偶像同好会 完结篇 第2章"}]}, {"group": 6, "chars": [{"name": "绀野纯子", "work": "佐贺偶像是传奇 梦幻银河乐园"}, {"name": "黎吉·星兰", "work": "与妳相恋到生命尽头"}, {"name": "芙兰姆·艾布利科德", "work": "「凭妳也想讨伐魔王？」被勇者小队逐出队伍，只好在王都自在过活"}]}, {"group": 7, "chars": [{"name": "优木雪菜", "work": "电影 LoveLive!虹咲学园学园偶像同好会 完结篇 第2章"}, {"name": "梨田亚里沙", "work": "这里是充满笑容的职场。"}, {"name": "蝴蝶香奈惠", "work": "剧场版 鬼灭之刃 无限城篇"}]}, {"group": 8, "chars": [{"name": "鹤卷瑞佳", "work": "Grow Up Show ～向日葵马戏团～"}, {"name": "川澄樱翔", "work": "Grow Up Show ～向日葵马戏团～"}, {"name": "津田茜", "work": "和机器人啪啪啪能算在经验人数里吗？？"}]}, {"group": 9, "chars": [{"name": "明智安娜/Cure Answer", "work": "名侦探光之美少女！"}, {"name": "八神琳", "work": "魔法少女奈叶 EXCEEDS Gun Blaze Vengeance"}, {"name": "千石由乃", "work": "BanG Dream! YUME∞MITA"}]}, {"group": 10, "chars": [{"name": "绫䌷芦花", "work": "超时空辉耀姬！"}, {"name": "米露吉特", "work": "「凭妳也想讨伐魔王？」被勇者小队逐出队伍，只好在王都自在过活"}, {"name": "大津茉里", "work": "再见菈菈"}]}, {"group": 11, "chars": [{"name": "郡上奏", "work": "上伊那牡丹，醉姿如百合"}, {"name": "酒匂雫", "work": "Grow Up Show ～向日葵马戏团～"}, {"name": "水野爱", "work": "佐贺偶像是传奇 梦幻银河乐园"}]}, {"group": 12, "chars": [{"name": "宫下爱", "work": "电影 LoveLive!虹咲学园学园偶像同好会 完结篇 第2章"}, {"name": "濑名紫阳花", "work": "我们不可能成为恋人！绝对不行。（※好像也不是不行！？）～NextShine！～"}, {"name": "欧咪", "work": "与妳相恋到生命尽头"}]}, {"group": 13, "chars": [{"name": "莉莉", "work": "我是不才恶女"}, {"name": "森亚露露卡/Cure Arcana", "work": "名侦探光之美少女！"}, {"name": "藤宫亚里沙", "work": "感谢对战。 ～大小姐才不玩格斗游戏～"}]}, {"group": 14, "chars": [{"name": "一之濑珠树", "work": "感谢对战。 ～大小姐才不玩格斗游戏～"}, {"name": "社美胡", "work": "对我垂涎欲滴的非人少女"}, {"name": "艾塔娜·伦巴", "work": "「凭妳也想讨伐魔王？」被勇者小队逐出队伍，只好在王都自在过活"}]}, {"group": 15, "chars": [{"name": "康娜卡姆伊", "work": "电影版 小林家的龙女仆：害怕寂寞的龙"}, {"name": "双见奈奈", "work": "这里是充满笑容的职场。"}, {"name": "狼嵜光", "work": "金牌得主 第二季"}]}, {"group": 16, "chars": [{"name": "宫永野乃花", "work": "BanG Dream! YUME∞MITA"}, {"name": "高町奈叶", "work": "魔法少女奈叶 EXCEEDS Gun Blaze Vengeance"}, {"name": "小栗帽", "work": "赛马娘 灰发灰姑娘 第二季度"}]}, {"group": 17, "chars": [{"name": "犬井夕", "work": "感谢对战。 ～大小姐才不玩格斗游戏～"}, {"name": "莫德·亚里", "work": "与妳相恋到生命尽头"}, {"name": "上伊那牡丹", "work": "上伊那牡丹，醉姿如百合"}]}, {"group": 18, "chars": [{"name": "峰月律", "work": "BanG Dream! YUME∞MITA"}, {"name": "辉夜", "work": "超时空辉耀姬！"}, {"name": "结束祈", "work": "金牌得主 第二季"}]}, {"group": 19, "chars": [{"name": "八百岁比名子", "work": "对我垂涎欲滴的非人少女"}, {"name": "琴纱月", "work": "我们不可能成为恋人！绝对不行。（※好像也不是不行！？）～NextShine！～"}, {"name": "抚子", "work": "和机器人啪啪啪能算在经验人数里吗？？"}]}, {"group": 20, "chars": [{"name": "托尔", "work": "电影版 小林家的龙女仆：害怕寂寞的龙"}, {"name": "米雅·泰勒", "work": "电影 LoveLive!虹咲学园学园偶像同好会 完结篇 第2章"}, {"name": "帆羽来爱/Cure Éclair", "work": "名侦探光之美少女！"}]}, {"group": 21, "chars": [{"name": "藤都子", "work": "BanG Dream! YUME∞MITA"}, {"name": "小林", "work": "电影版 小林家的龙女仆：害怕寂寞的龙"}, {"name": "赛菈·安比连", "work": "「凭妳也想讨伐魔王？」被勇者小队逐出队伍，只好在王都自在过活"}]}, {"group": 22, "chars": [{"name": "花取单衣", "work": "我们不可能成为恋人！绝对不行。（※好像也不是不行！？）～NextShine！～"}, {"name": "甘织玲奈子", "work": "我们不可能成为恋人！绝对不行。（※好像也不是不行！？）～NextShine！～"}, {"name": "夜绘美绪", "work": "感谢对战。 ～大小姐才不玩格斗游戏～"}]}, {"group": 23, "chars": [{"name": "塞拉斯·柳田·利林费尔德", "work": "剧场版 LoveLive!莲之空女学院学园偶像俱乐部 Bloom Garden Party"}, {"name": "间瑞希", "work": "这里是充满笑容的职场。"}, {"name": "王冢真唯", "work": "我们不可能成为恋人！绝对不行。（※好像也不是不行！？）～NextShine！～"}]}, {"group": 24, "chars": [{"name": "砺波伊吹", "work": "上伊那牡丹，醉姿如百合"}, {"name": "甘织遥奈", "work": "我们不可能成为恋人！绝对不行。（※好像也不是不行！？）～NextShine！～"}, {"name": "哈路", "work": "与妳相恋到生命尽头"}]}, {"group": 25, "chars": [{"name": "朱慧月", "work": "我是不才恶女"}, {"name": "小林未来/Cure Mystique", "work": "名侦探光之美少女！"}, {"name": "三船栞子", "work": "电影 LoveLive!虹咲学园学园偶像同好会 完结篇 第2章"}]}, {"group": 26, "chars": [{"name": "近江彼方", "work": "电影 LoveLive!虹咲学园学园偶像同好会 完结篇 第2章"}, {"name": "薇欧拉", "work": "BanG Dream! YUME∞MITA"}, {"name": "幽鬼", "work": "靠死亡游戏混饭吃。"}]}, {"group": 27, "chars": [{"name": "高咲侑", "work": "电影 LoveLive!虹咲学园学园偶像同好会 完结篇 第2章"}, {"name": "蝴蝶忍", "work": "剧场版 鬼灭之刃 无限城篇"}, {"name": "艾露玛", "work": "电影版 小林家的龙女仆：害怕寂寞的龙"}]}, {"group": 28, "chars": [{"name": "杜滋琪·席娜", "work": "与妳相恋到生命尽头"}, {"name": "酒寄彩叶", "work": "超时空辉耀姬！"}, {"name": "月见八千代", "work": "超时空辉耀姬！"}]}, {"group": 29, "chars": [{"name": "北杜八重花", "work": "上伊那牡丹，醉姿如百合"}, {"name": "爱丝塔", "work": "与妳相恋到生命尽头"}, {"name": "黄玲琳", "work": "我是不才恶女"}]}, {"group": 30, "chars": [{"name": "日野下花帆", "work": "剧场版 LoveLive!莲之空女学院学园偶像俱乐部 Bloom Garden Party"}, {"name": "张景岚", "work": "上伊那牡丹，醉姿如百合"}, {"name": "一之濑花", "work": "感谢对战。 ～大小姐才不玩格斗游戏～"}]}, {"group": 31, "chars": [{"name": "卡嘉莉·美美", "work": "与妳相恋到生命尽头"}, {"name": "菲特·T·哈洛温", "work": "魔法少女奈叶 EXCEEDS Gun Blaze Vengeance"}, {"name": "结束实叶", "work": "金牌得主 第二季"}]}, {"group": 32, "chars": [{"name": "樱坂雫", "work": "电影 LoveLive!虹咲学园学园偶像同好会 完结篇 第2章"}, {"name": "富朗", "work": "与妳相恋到生命尽头"}, {"name": "斯韦特兰娜·罗森·山田", "work": "Grow Up Show ～向日葵马戏团～"}]}];
+const STORE = "yamibo-2026-r2-prediction";
+const TOTAL = DATA.length;
+
+const state = {};
+try {
+  const saved = JSON.parse(localStorage.getItem(STORE) || "{}");
+  for (const g of DATA) {
+    const v = saved[g.group];
+    if (Number.isInteger(v) && v >= 0 && v < g.chars.length) state[g.group] = v;
+  }
+} catch (e) {}
+function save() { try { localStorage.setItem(STORE, JSON.stringify(state)); } catch (e) {} }
+
+const $ = (id) => document.getElementById(id);
+const groupsEl = $("groups"), stripEl = $("strip"), listEl = $("list");
+const refs = {};
+const SVG = '<svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8.5"/><path d="M6 10.4l2.6 2.6L14 7.6"/></svg>';
+
+function el(tag, cls, text) {
+  const n = document.createElement(tag);
+  if (cls) n.className = cls;
+  if (text != null) n.textContent = text;
+  return n;
+}
+
+for (const g of DATA) {
+  const card = el("section", "group");
+  card.id = "g-" + g.group;
+  card.setAttribute("role", "group");
+  card.setAttribute("aria-label", "第 " + g.group + " 组");
+  const head = el("div", "group-head");
+  head.append(el("b", null, "第 " + g.group + " 组"));
+  const status = el("span", null, "未选");
+  head.append(status);
+  card.append(head);
+
+  const btns = g.chars.map((c, i) => {
+    const b = el("button", "opt");
+    b.type = "button";
+    b.setAttribute("aria-pressed", "false");
+    const txt = el("span", "txt");
+    txt.append(el("span", "nm", c.name), el("span", "wk", c.work));
+    b.append(txt);
+    b.insertAdjacentHTML("beforeend", SVG);
+    b.addEventListener("click", () => {
+      if (state[g.group] === i) delete state[g.group]; else state[g.group] = i;
+      save(); refresh();
+    });
+    card.append(b);
+    return b;
+  });
+  groupsEl.append(card);
+
+  const cell = el("button", "cell", String(g.group));
+  cell.type = "button";
+  cell.addEventListener("click", () => goTo(g.group));
+  stripEl.append(cell);
+
+  const hay = g.chars.map((c) => c.name + " " + c.work).join(" ").toLowerCase();
+  refs[g.group] = { card, btns, status, cell, hay };
+}
+
+function lines() {
+  return DATA.map((g) => g.group + "." + (state[g.group] != null ? g.chars[state[g.group]].name : "")).join("\n");
+}
+
+function refresh() {
+  let n = 0;
+  for (const g of DATA) {
+    const r = refs[g.group], sel = state[g.group];
+    const has = sel != null;
+    if (has) n++;
+    r.btns.forEach((b, i) => {
+      const on = i === sel;
+      b.classList.toggle("on", on);
+      b.setAttribute("aria-pressed", on ? "true" : "false");
+    });
+    r.card.classList.toggle("has-pick", has);
+    r.status.textContent = has ? "已选" : "未选";
+    r.cell.classList.toggle("done", has);
+    r.cell.setAttribute("aria-label", "第 " + g.group + " 组，" + (has ? "已选" : "未选"));
+  }
+  listEl.value = lines();
+  $("count").textContent = "已选 " + n + " / " + TOTAL;
+  $("count2").textContent = n === TOTAL ? "已全部选完" : "已选 " + n + " / " + TOTAL;
+  $("stripCount").textContent = n + " / " + TOTAL;
+  const jump = $("jump");
+  jump.disabled = n === TOTAL;
+  jump.textContent = n === TOTAL ? "32 组都选好了" : "跳到第一个未选分组";
+}
+
+let flashTimer;
+function goTo(group) {
+  $("search").value = "";
+  applyFilter();
+  const card = refs[group].card;
+  card.scrollIntoView({ block: "center" });
+  card.classList.add("flash");
+  clearTimeout(flashTimer);
+  flashTimer = setTimeout(() => card.classList.remove("flash"), 1400);
+}
+
+$("jump").addEventListener("click", () => {
+  const next = DATA.find((g) => state[g.group] == null);
+  if (next) goTo(next.group);
+});
+
+function applyFilter() {
+  const q = $("search").value.trim().toLowerCase();
+  let shown = 0;
+  for (const g of DATA) {
+    const ok = !q || refs[g.group].hay.includes(q);
+    refs[g.group].card.hidden = !ok;
+    if (ok) shown++;
+  }
+  $("empty").hidden = shown > 0;
+}
+$("search").addEventListener("input", applyFilter);
+
+let toastTimer;
+function toast(msg) {
+  const t = $("toast");
+  t.textContent = msg;
+  t.hidden = false;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { t.hidden = true; }, 2600);
+}
+
+async function copyList() {
+  const text = listEl.value;
+  const left = TOTAL - Object.keys(state).length;
+  let ok = false;
+  try { await navigator.clipboard.writeText(text); ok = true; }
+  catch (e) {
+    try { listEl.focus(); listEl.select(); ok = document.execCommand("copy"); } catch (e2) {}
+  }
+  if (ok) toast(left ? "已复制，还有 " + left + " 组未选，对应编号留空" : "已复制，去预测帖里粘贴回复");
+  else { listEl.focus(); listEl.select(); toast("浏览器拦截了复制，名单已全选，请按 Ctrl/⌘+C"); }
+}
+$("copy").addEventListener("click", copyList);
+$("copy2").addEventListener("click", copyList);
+
+let clearTimer, armed = false;
+$("clear").addEventListener("click", () => {
+  const b = $("clear");
+  if (!armed) {
+    armed = true;
+    b.textContent = "再点一次确认清空";
+    clearTimer = setTimeout(() => { armed = false; b.textContent = "清空选择"; }, 3000);
+    return;
+  }
+  clearTimeout(clearTimer);
+  armed = false;
+  b.textContent = "清空选择";
+  for (const k of Object.keys(state)) delete state[k];
+  save(); refresh();
+});
+
+refresh();
+</script>
+</body>
+</html>

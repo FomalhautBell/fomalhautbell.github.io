@@ -146,6 +146,33 @@ const isActive = (path: string) => {
             }
 
 
+            <li>
+              <LinkButton
+                href={localizePath("/activities", lang)}
+                class:list={[
+                  "nav-link",
+                  { "nav-active": isActive("/activities") },
+                ]}
+                title={t("nav.activities")}
+                aria-label={t("nav.activities")}
+              >
+                <svg
+                  class="hidden sm:inline-block size-4.5"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z" />
+                  <path d="M18.5 15.5l.8 2.2 2.2.8-2.2.8-.8 2.2-.8-2.2-2.2-.8 2.2-.8z" />
+                </svg>
+                <span class="sm:sr-only">{t("nav.activities")}</span>
+              </LinkButton>
+            </li>
+
             <!-- Separator -->
             <li class="flex items-center px-1" aria-hidden="true">
               <div class="h-4 w-px bg-border/30"></div>
