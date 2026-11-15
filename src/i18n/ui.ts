@@ -25,7 +25,7 @@ export const ui = {
     "nav.archives": "归档",
     "nav.galleries": "相册",
     "nav.activities": "活动",
-    "activities.desc": "一些可以点开玩的小东西：问卷、投票、小工具。",
+    "activities.desc": "无用之用不是吗！",
     "nav.home": "首页",
     "nav.menu": "菜单",
     "nav.openMenu": "打开菜单",
