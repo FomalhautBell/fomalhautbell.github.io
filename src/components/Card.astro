@@ -203,12 +203,14 @@ if (SITE.showCoverImages) {
       )}
     </div>
 
-    <p
-      id={descriptionId}
-      class="relative z-20 mt-2 line-clamp-2 text-sm leading-relaxed text-foreground/75 pointer-events-auto select-text"
-    >
-      {description}
-    </p>
+    {description && (
+      <p
+        id={descriptionId}
+        class="relative z-20 mt-2 line-clamp-2 text-sm leading-relaxed text-foreground/75 pointer-events-auto select-text"
+      >
+        {description}
+      </p>
+    )}
 
     <!-- Tags -->
     {SITE.showTagsInCards && tags.length > 0 && (

@@ -53,6 +53,7 @@
 .prose-article h4,
 .prose-article h5,
 .prose-article h6 {
+  scroll-margin-top: 6rem;
   font-family: inherit;
   font-weight: 600;
   letter-spacing: normal;

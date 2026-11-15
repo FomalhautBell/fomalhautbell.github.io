@@ -1,9 +1,9 @@
 ---
 title: "生息间"
-description: "彝风，科学吧我们的山野性。"
+description: ""
 pubDatetime: 2026-11-15T00:00:00Z
 tags:
-  - 随笔
+  - 小说
 draft: false
 ---
 

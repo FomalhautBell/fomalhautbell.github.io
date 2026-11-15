@@ -93,29 +93,6 @@ const { noMarginTop = false, class: className, ...attrs } = Astro.props;
         &copy; {currentYear}
         {t("site.title")} · {t("footer.rights")}
       </p>
-      <p class="font-firacode text-[11px] tracking-wide text-foreground/45">
-        {
-          t("footer.madeWith")
-            .split("♥")
-            .map((part, i) =>
-              i === 0 ? (
-                <>{part}</>
-              ) : (
-                <>
-                  <svg
-                    class="inline-block size-3 align-[-1px] text-accent"
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
-                    aria-hidden="true"
-                  >
-                    <path d="M12 21s-7.5-4.6-9.7-9A5.4 5.4 0 0 1 12 6.6 5.4 5.4 0 0 1 21.7 12c-2.2 4.4-9.7 9-9.7 9z" />
-                  </svg>
-                  {part}
-                </>
-              )
-            )
-        }
-      </p>
     </div>
   </div>
 </footer>

@@ -59,8 +59,8 @@ export const ui = {
     "posts.empty": "还没有文章。",
     "posts.emptyHint": "新的内容正在酝酿中，欢迎稍后再来。",
     "posts.pageOf": "第 {current} / {total} 页",
-    "posts.metaDesc": "全部已发布文章。",
-    "posts.metaDescPaged": "全部已发布文章（第 {current} / {total} 页）。",
+    "posts.metaDesc": "全部已发布文章",
+    "posts.metaDescPaged": "全部已发布文章（第 {current} / {total} 页）",
 
     // ── 标签 ──
     "tags.title": "标签",

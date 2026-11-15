@@ -8,6 +8,7 @@ import EditPost from "@/components/EditPost.astro";
 import ShareLinks from "@/components/ShareLinks.astro";
 import Breadcrumb from "@/components/Breadcrumb.astro";
 import BackToTopButton from "@/components/BackToTopButton.astro";
+import TocIsland from "@/components/TocIsland.astro";
 import GalleryEmbed from "@/components/GalleryEmbed.astro";
 import { getPath } from "@/utils/getPath";
 import { slugifyStr } from "@/utils/slugify";
@@ -63,7 +64,7 @@ const ogImage = ogImageUrl
 const layoutProps = {
   title: `${title} | ${t("site.title")}`,
   author,
-  description,
+  description: description || SITE.desc,
   pubDatetime,
   modDatetime,
   canonicalURL,
@@ -327,6 +328,7 @@ const nextPost =
     </div>
   </main>
   <BackToTopButton />
+  <TocIsland />
   <Footer />
 </Layout>
 

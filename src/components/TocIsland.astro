@@ -1,0 +1,341 @@
+---
+/**
+ * TocIsland — 文章页右下角的悬浮目录。
+ * 收起时是一个圆形按钮，点开后浮出一块小岛式面板，
+ * 列出正文的 h2/h3，点击平滑跳转并高亮当前章节。
+ * 配色全部取自站点变量，跟随亮/暗主题。
+ */
+---
+
+<div class="toc-island" data-toc-island>
+  <button
+    type="button"
+    class="toc-toggle"
+    aria-expanded="false"
+    aria-controls="toc-panel"
+    aria-label="目录"
+    title="目录"
+  >
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <line x1="8" y1="6" x2="21" y2="6" />
+      <line x1="8" y1="12" x2="21" y2="12" />
+      <line x1="8" y1="18" x2="21" y2="18" />
+      <line x1="3" y1="6" x2="3.01" y2="6" />
+      <line x1="3" y1="12" x2="3.01" y2="12" />
+      <line x1="3" y1="18" x2="3.01" y2="18" />
+    </svg>
+  </button>
+
+  <nav id="toc-panel" class="toc-panel" aria-label="文章目录" hidden>
+    <p class="toc-heading">目录</p>
+    <ol class="toc-list" data-toc-list></ol>
+  </nav>
+</div>
+
+<style>
+  .toc-island {
+    position: fixed;
+    inset-inline-end: 1rem;
+    bottom: 5.5rem;
+    z-index: 45;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.6rem;
+  }
+
+  .toc-toggle {
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 999px;
+    border: 1px solid color-mix(in srgb, var(--border) 30%, transparent);
+    background: color-mix(in srgb, var(--background) 90%, transparent);
+    -webkit-backdrop-filter: blur(12px) saturate(140%);
+    backdrop-filter: blur(12px) saturate(140%);
+    color: color-mix(in srgb, var(--foreground) 70%, transparent);
+    box-shadow: 0 10px 30px -18px color-mix(in srgb, var(--foreground) 45%, transparent);
+    transition:
+      color 0.2s ease,
+      border-color 0.2s ease,
+      transform 0.2s ease,
+      background-color 0.2s ease;
+  }
+
+  .toc-toggle svg {
+    width: 1.05rem;
+    height: 1.05rem;
+  }
+
+  .toc-toggle:hover,
+  .toc-toggle:focus-visible {
+    color: var(--accent);
+    border-color: color-mix(in srgb, var(--accent) 50%, transparent);
+    transform: translateY(-1px);
+  }
+
+  .toc-island.is-open .toc-toggle {
+    color: var(--accent);
+    border-color: color-mix(in srgb, var(--accent) 45%, transparent);
+    background: color-mix(in srgb, var(--accent) 12%, var(--background));
+  }
+
+  .toc-panel {
+    width: 16rem;
+    max-height: min(60vh, 26rem);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 0.5rem;
+    border-radius: 1rem;
+    border: 1px solid color-mix(in srgb, var(--border) 28%, transparent);
+    background: color-mix(in srgb, var(--background) 96%, transparent);
+    -webkit-backdrop-filter: blur(24px) saturate(160%);
+    backdrop-filter: blur(24px) saturate(160%);
+    box-shadow:
+      0 24px 60px -24px color-mix(in srgb, var(--foreground) 35%, transparent),
+      0 0 0 0.5px color-mix(in srgb, var(--foreground) 6%, transparent);
+    transform-origin: bottom right;
+    animation: toc-in 0.18s cubic-bezier(0.16, 1, 0.3, 1) both;
+    scrollbar-width: thin;
+    scrollbar-color: color-mix(in srgb, var(--muted) 80%, transparent) transparent;
+  }
+
+  .toc-panel::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  .toc-panel::-webkit-scrollbar-thumb {
+    background: color-mix(in srgb, var(--muted) 90%, transparent);
+    border-radius: 999px;
+  }
+
+  @keyframes toc-in {
+    from {
+      opacity: 0;
+      transform: translateY(6px) scale(0.96);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  .toc-heading {
+    margin: 0.25rem 0 0.35rem;
+    padding-inline-start: 0.6rem;
+    font-family: var(--font-firacode), ui-monospace, monospace;
+    font-size: 0.625rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: color-mix(in srgb, var(--foreground) 40%, transparent);
+  }
+
+  .toc-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .toc-list :global(a) {
+    display: block;
+    padding: 0.35rem 0.6rem;
+    border-radius: 0.5rem;
+    font-size: 0.8125rem;
+    line-height: 1.45;
+    text-decoration: none;
+    color: color-mix(in srgb, var(--foreground) 62%, transparent);
+    transition:
+      color 0.15s ease,
+      background-color 0.15s ease;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .toc-list :global(a):hover,
+  .toc-list :global(a):focus-visible {
+    color: var(--accent);
+    background: color-mix(in srgb, var(--accent) 9%, transparent);
+  }
+
+  .toc-list :global(.toc-sub a) {
+    padding-inline-start: 1.4rem;
+    font-size: 0.78125rem;
+    color: color-mix(in srgb, var(--foreground) 48%, transparent);
+  }
+
+  .toc-list :global(.is-active a) {
+    color: var(--accent);
+    background: color-mix(in srgb, var(--accent) 12%, transparent);
+    position: relative;
+  }
+
+  .toc-list :global(.is-active a)::before {
+    content: "";
+    position: absolute;
+    inset-inline-start: 0.28rem;
+    top: 50%;
+    width: 3px;
+    height: 0.85em;
+    transform: translateY(-50%);
+    border-radius: 999px;
+    background: var(--accent);
+  }
+
+  .toc-list :global(.is-active a) {
+    padding-inline-start: 0.85rem;
+  }
+
+  .toc-list :global(.toc-sub.is-active a) {
+    padding-inline-start: 1.6rem;
+  }
+
+  @media (max-width: 640px) {
+    .toc-island {
+      inset-inline-end: 0.75rem;
+      bottom: 5rem;
+    }
+
+    .toc-panel {
+      width: min(16rem, calc(100vw - 2rem));
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .toc-panel {
+      animation: none;
+    }
+
+    .toc-toggle {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  const HEADER_OFFSET = 96;
+
+  function setupTocIsland() {
+    const root = document.querySelector<HTMLElement>("[data-toc-island]");
+    if (!root) return;
+
+    // astro:page-load 首次加载也会触发，避免重复绑定（否则两次 toggle 互相抵消）
+    if (root.dataset.tocReady === "1") return;
+    root.dataset.tocReady = "1";
+
+    const toggle = root.querySelector<HTMLButtonElement>(".toc-toggle");
+    const panel = root.querySelector<HTMLElement>("#toc-panel");
+    const list = root.querySelector<HTMLElement>("[data-toc-list]");
+    const article = document.querySelector(".prose-article");
+    if (!toggle || !panel || !list || !article) {
+      root.remove();
+      return;
+    }
+
+    const headings = Array.from(
+      article.querySelectorAll<HTMLElement>("h2[id], h3[id]")
+    );
+
+    // 标题太少时不值得显示目录
+    if (headings.length < 2) {
+      root.remove();
+      return;
+    }
+
+    // 构建列表
+    list.replaceChildren();
+    for (const heading of headings) {
+      const li = document.createElement("li");
+      if (heading.tagName === "H3") li.className = "toc-sub";
+      // 标题里带一个 # 锚点链接，取文字时要排除掉
+      const clone = heading.cloneNode(true) as HTMLElement;
+      clone.querySelectorAll(".heading-link").forEach(el => el.remove());
+      const label = clone.textContent?.replace(/\s+/g, " ").trim() || heading.id;
+
+      const link = document.createElement("a");
+      link.href = `#${heading.id}`;
+      link.textContent = label;
+      link.title = label;
+      li.appendChild(link);
+      list.appendChild(li);
+    }
+
+    const items = Array.from(list.children) as HTMLElement[];
+
+    // ── 展开 / 收起 ──
+    const setOpen = (open: boolean) => {
+      root.classList.toggle("is-open", open);
+      toggle.setAttribute("aria-expanded", String(open));
+      panel.hidden = !open;
+      if (open) {
+        updateActive();
+      }
+    };
+
+    toggle.addEventListener("click", e => {
+      e.stopPropagation();
+      setOpen(!root.classList.contains("is-open"));
+    });
+
+    document.addEventListener("click", e => {
+      if (!root.classList.contains("is-open")) return;
+      if (!root.contains(e.target as Node)) setOpen(false);
+    });
+
+    document.addEventListener("keydown", e => {
+      if (e.key === "Escape") setOpen(false);
+    });
+
+    // ── 点击平滑跳转 ──
+    list.addEventListener("click", e => {
+      const anchor = (e.target as HTMLElement).closest<HTMLAnchorElement>("a");
+      if (!anchor) return;
+      const id = decodeURIComponent(anchor.hash.slice(1));
+      const target = document.getElementById(id);
+      if (!target) return;
+
+      e.preventDefault();
+      const top =
+        target.getBoundingClientRect().top + window.scrollY - HEADER_OFFSET;
+      window.scrollTo({ top, behavior: "smooth" });
+      history.replaceState(null, "", `#${id}`);
+      if (window.innerWidth < 640) setOpen(false);
+    });
+
+    // ── 滚动时高亮当前章节 ──
+    function updateActive() {
+      let current = 0;
+      for (let i = 0; i < headings.length; i++) {
+        if (headings[i].getBoundingClientRect().top - HEADER_OFFSET <= 1) {
+          current = i;
+        } else {
+          break;
+        }
+      }
+      items.forEach((li, i) => li.classList.toggle("is-active", i === current));
+    }
+
+    let ticking = false;
+    window.addEventListener(
+      "scroll",
+      () => {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(() => {
+          updateActive();
+          ticking = false;
+        });
+      },
+      { passive: true }
+    );
+
+    updateActive();
+  }
+
+  setupTocIsland();
+  document.addEventListener("astro:page-load", setupTocIsland);
+</script>
