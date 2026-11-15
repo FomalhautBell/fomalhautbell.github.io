@@ -3,8 +3,8 @@ import IconMoon from "@/assets/icons/IconMoon.svg";
 import IconSearch from "@/assets/icons/IconSearch.svg";
 import IconSunHigh from "@/assets/icons/IconSunHigh.svg";
 import { SITE } from "@/config";
-import { getLangFromUrl, useTranslations, localizePath, switchLangPath } from "@/i18n/utils";
-import { LANG_LABELS, type Lang } from "@/i18n/ui";
+import { useTranslations, localizePath } from "@/i18n/utils";
+import type { Lang } from "@/i18n/ui";
 
 interface Props {
   currentPath: string;
@@ -13,8 +13,6 @@ interface Props {
 
 const { currentPath, lang } = Astro.props;
 const t = useTranslations(lang);
-const otherLang = lang === "zh-CN" ? "en" : "zh-CN";
-const switchHref = switchLangPath(Astro.url.pathname, otherLang);
 
 const isActive = (path: string) => {
   const currentPathArray = currentPath.split("/").filter((p) => p.trim());
@@ -120,14 +118,6 @@ const isActive = (path: string) => {
               </button>
             )
           }
-          <a
-            href={switchHref}
-            hreflang={otherLang}
-            class="mobile-action-btn flex-1 justify-center no-underline"
-            aria-label={t("nav.language")}
-          >
-            <span>{LANG_LABELS[otherLang]}</span>
-          </a>
         </div>
       </div>
     </div>

@@ -27,14 +27,9 @@ export function useTranslations(lang: Lang) {
   };
 }
 
-/** 把站内绝对路径挂上语言前缀 */
-export function localizePath(path: string, lang: Lang): string {
-  const clean = path.startsWith("/") ? path : `/${path}`;
-  const stripped = LANGS.some(l => clean === `/${l}` || clean.startsWith(`/${l}/`))
-    ? clean.replace(new RegExp(`^/(${LANGS.join("|")})`), "")
-    : clean;
-  const rest = stripped === "" ? "/" : stripped;
-  return rest === "/" ? `/${lang}/` : `/${lang}${rest}`;
+/** 单语站点：去掉可能残留的语言前缀，返回根路径 */
+export function localizePath(path: string, _lang?: Lang): string {
+  return stripLang(path.startsWith("/") ? path : `/${path}`);
 }
 
 /** 在两种语言之间切换同一个页面 */

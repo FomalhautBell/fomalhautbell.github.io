@@ -1,10 +1,6 @@
 ---
-import { LANGS } from "@/i18n/ui";
 import { getLangFromUrl, useTranslations, localizePath } from "@/i18n/utils";
 
-export function getStaticPaths() {
-  return LANGS.map(lang => ({ params: { lang } }));
-}
 import "@pagefind/default-ui/css/ui.css";
 import Layout from "@/layouts/Layout.astro";
 import Header from "@/components/Header.astro";
@@ -31,9 +27,6 @@ const backUrl = SITE.showBackButton ? `${Astro.url.pathname}` : "/";
         <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">
           <span class="glow-text">{t("search.title")}</span>
         </h1>
-        <p class="mt-3 max-w-lg text-foreground/70 italic">
-          {t("search.subtitle")}
-        </p>
       </div>
     </div>
 

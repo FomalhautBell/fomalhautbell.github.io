@@ -24,25 +24,17 @@ pnpm preview    # serve the built site locally
 
 ## Languages
 
-The site is bilingual. Pages live under a locale prefix and a single page file
-renders both languages via `getStaticPaths`:
+`main` 只发布中文，页面直接挂在根路径下（`/posts/`、`/tags/` …）。
 
-- `/zh-CN/…` — 中文（默认，`/` 会重定向到这里）
-- `/en/…` — English
+英文版本连同语言切换器维护在 `i18n-en` 分支上（`/zh-CN/…` 与 `/en/…` 双前缀）。
+需要时切过去即可：
 
-UI strings live in `src/i18n/ui.ts` (one object per locale, flat keys). Helpers in
-`src/i18n/utils.ts`: `getLangFromUrl`, `useTranslations`, `localizePath`,
-`switchLangPath`. In a page or component:
-
-```astro
-const lang = getLangFromUrl(Astro.url);
-const t = useTranslations(lang);
----
-<a href={localizePath("/posts", lang)}>{t("nav.posts")}</a>
+```bash
+git switch i18n-en    # 双语版本
+git switch main       # 中文版本
 ```
 
-To add a locale: extend `LANGS` and `ui` in `src/i18n/ui.ts`, then add the label to
-`LANG_LABELS`. Any `getStaticPaths` that maps over `LANGS` picks it up automatically.
+文案字典在 `src/i18n/ui.ts`，取用方式 `const t = useTranslations(lang)`。
 
 ## Writing posts
 

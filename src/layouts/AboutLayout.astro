@@ -20,20 +20,6 @@ const t = useTranslations(lang);
   <Header />
   <Breadcrumb />
   <main id="main-content" class="app-layout">
-    <!-- Hero with interactive aurora -->
-    <div class="about-hero" data-about-hero>
-      <div class="aurora-orb aurora-orb-1"></div>
-      <div class="aurora-orb aurora-orb-2"></div>
-      <div class="aurora-orb aurora-orb-3"></div>
-      <div class="aurora-mouse" data-about-mouse></div>
-      <div class="hero-content">
-        <h1 class="hero-title">
-          <span class="greeting">{lang === "zh-CN" ? "你好，我是" : "Hi, I'm"}</span>
-          <span class="name-glow">{t("site.author")}</span>
-        </h1>
-      </div>
-    </div>
-
     <section
       id="about"
       class="about-content app-prose mb-28 max-w-app prose-img:border-0"

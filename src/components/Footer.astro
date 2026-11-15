@@ -4,7 +4,6 @@ import { SOCIALS } from "@/constants";
 import LinkButton from "./LinkButton.astro";
 import { SITE } from "@/config";
 import { getLangFromUrl, useTranslations, localizePath } from "@/i18n/utils";
-import Wordmark from "./Wordmark.astro";
 
 const currentYear = new Date().getFullYear();
 const lang = getLangFromUrl(Astro.url);
@@ -41,14 +40,6 @@ const { noMarginTop = false, class: className, ...attrs } = Astro.props;
     >
       <!-- Brand column -->
       <div class="flex flex-col items-center gap-3 sm:items-start">
-        <a
-          href={localizePath("/", lang)}
-          aria-label={`${t("breadcrumb.home")} · ${t("site.title")}`}
-          class="group footer-home-link relative flex items-center gap-2 rounded-md text-lg font-bold tracking-tight"
-        >
-          <Wordmark size="footer" class="footer-logo w-28 opacity-80 transition-all duration-300 group-hover:opacity-100 group-hover:scale-105 dark:invert" />
-          <span class="sr-only">{t("site.title")}</span>
-        </a>
         <p
           class="max-w-xs text-center font-firacode text-[11px] leading-relaxed tracking-wide text-foreground/55 sm:text-start"
         >

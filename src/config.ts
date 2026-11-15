@@ -2,7 +2,7 @@ export const SITE = {
   website: "https://fomalhautbell.github.io/",
   author: "FomalhautBell",
   profile: process.env.PUBLIC_SOCIAL_GITHUB ?? "", // set in .env
-  desc: "记录代码、系统，以及偶尔的跑题。",
+  desc: "唉，飞光！悲丽平壮观，白如积雪，利若秋霜。",
   title: "FomalhautBell",
   ogImage: "og.webp", // located in the public folder
   ogImageZh: "og-zh.webp", // 中文站点使用的 OG 图

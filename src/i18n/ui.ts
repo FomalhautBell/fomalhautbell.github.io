@@ -1,5 +1,7 @@
-export const LANGS = ["zh-CN", "en"] as const;
-export type Lang = (typeof LANGS)[number];
+// main 分支只发布中文；英文版在 i18n-en 分支
+const ALL_LANGS = ["zh-CN", "en"] as const;
+export const LANGS = ["zh-CN"] as const;
+export type Lang = (typeof ALL_LANGS)[number];
 
 export const DEFAULT_LANG: Lang = "zh-CN";
 
@@ -42,8 +44,7 @@ export const ui = {
     "pagination.page": "第 {page} 页",
 
     // ── 首页 ──
-    "home.description":
-      "一个把好奇心写成代码的地方。记录 Web 开发、软件架构，以及让技术世界转起来的一切。",
+    "home.description": "唉，飞光！悲丽平壮观，白如积雪，利若秋霜。",
     "home.writtenBy": "作者",
     "home.featured": "精选",
     "home.recent": "最新",
@@ -64,7 +65,7 @@ export const ui = {
     // ── 标签 ──
     "tags.title": "标签",
     "tags.all": "全部标签",
-    "tags.subtitle": "探索全部主题，每个标签都是一个内容宇宙。",
+    "tags.subtitle": "落脚点与击球点",
     "tags.count": "{count} 个标签",
     "tags.pageDesc": "所有带有「{name}」标签的文章。",
     "tags.empty": "还没有标签。",
@@ -118,7 +119,7 @@ export const ui = {
     "404.back": "回到首页",
 
     // ── 页脚 ──
-    "footer.tagline": "记录代码、系统，以及偶尔的跑题。",
+    "footer.tagline": "停车场而已。",
     "footer.connect": "联系",
     "footer.madeWith": "用 ♥ 和大量咖啡做成",
     "footer.rights": "保留所有权利",

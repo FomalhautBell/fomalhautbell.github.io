@@ -11,7 +11,6 @@ import "@pagefind/default-ui/css/ui.css";
 import type { ContentEntry } from "@/utils/contentEntry";
 import getSortedPosts from "@/utils/getSortedPosts";
 import { SITE } from "@/config";
-import { LANGS } from "@/i18n/ui";
 import { getLangFromUrl, useTranslations, localizePath } from "@/i18n/utils";
 
 export const getStaticPaths = (async ({ paginate }) => {
@@ -21,10 +20,9 @@ export const getStaticPaths = (async ({ paginate }) => {
       ? getCollection("galleries", ({ data }) => !data.draft)
       : Promise.resolve([]),
   ]);
-  const posts = getSortedPosts([...blogPosts, ...galleryPosts]);
-  return LANGS.flatMap(lang =>
-    paginate(posts, { params: { lang }, pageSize: SITE.postPerPage })
-  );
+  return paginate(getSortedPosts([...blogPosts, ...galleryPosts]), {
+    pageSize: SITE.postPerPage,
+  });
 }) satisfies GetStaticPaths;
 
 const lang = getLangFromUrl(Astro.url);

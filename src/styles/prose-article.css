@@ -1,8 +1,10 @@
 /* 自托管中文正文字体：霞鹜文楷（SIL OFL 1.1，见 public/fonts/OFL.txt）
-   25MB TTF 已转成 7.7MB woff2；只在文章页被引用时才下载。 */
+   woff2（7.7MB）优先，TTF（25MB）作为回退；两者都只在文章页才会被请求。 */
 @font-face {
   font-family: "LXGW WenKai";
-  src: url("/fonts/lxgw-wenkai-regular.woff2") format("woff2");
+  src:
+    url("/fonts/lxgw-wenkai-regular.woff2") format("woff2"),
+    url("/fonts/lxgw-wenkai-regular.ttf") format("truetype");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -85,6 +87,23 @@
   font-size: 0.95rem;
   line-height: 1.6;
   opacity: 0.85;
+}
+
+
+/* 标题下的小渐变线（沿用 AstroPaper 的装饰语言，留给后续复用） */
+.prose-article h2::after,
+.prose-article h3::after {
+  content: "";
+  display: block;
+  width: 2.5rem;
+  height: 3px;
+  margin-top: 0.5em;
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    var(--accent),
+    color-mix(in srgb, var(--accent) 0%, transparent)
+  );
 }
 
 /* 强调 */

@@ -10,7 +10,6 @@ import Pagination from "@/components/Pagination.astro";
 import getUniqueTags from "@/utils/getUniqueTags";
 import getPostsByTag from "@/utils/getPostsByTag";
 import { SITE } from "@/config";
-import { LANGS } from "@/i18n/ui";
 import { getLangFromUrl, useTranslations, localizePath } from "@/i18n/utils";
 
 export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
@@ -26,13 +25,11 @@ export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
   return tags.flatMap(({ tag, tagName }) => {
     const tagPosts = getPostsByTag(posts, tag);
 
-    return LANGS.flatMap(lang =>
-      paginate(tagPosts, {
-        params: { lang, tag },
-        props: { tagName },
-        pageSize: SITE.postPerPage,
-      })
-    );
+    return paginate(tagPosts, {
+      params: { tag },
+      props: { tagName },
+      pageSize: SITE.postPerPage,
+    });
   });
 }
 

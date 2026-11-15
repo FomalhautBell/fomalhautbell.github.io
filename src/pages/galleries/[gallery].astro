@@ -11,7 +11,6 @@ import IconGallery from "@/assets/icons/IconGallery.svg";
 import { slugifyStr } from "@/utils/slugify";
 import { getLangFromUrl, useTranslations, localizePath } from "@/i18n/utils";
 import { SITE } from "@/config";
-import { LANGS } from "@/i18n/ui";
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
@@ -20,17 +19,14 @@ export async function getStaticPaths() {
   if (!SITE.showGalleries) return [];
 
   const galleries = await getCollection("galleries", ({ data }) => !data.draft);
-  return LANGS.flatMap(lang =>
-    galleries.map(gallery => ({
-      params: {
-        lang,
-        gallery: gallery.id
+  return galleries.map(gallery => ({
+    params: {
+      gallery: gallery.id
           .replace(/\/index\.(md|mdx)$/, "")
-          .replace(/\.(md|mdx)$/, ""),
-      },
-      props: { entry: gallery },
-    }))
-  );
+        .replace(/\.(md|mdx)$/, ""),
+    },
+    props: { entry: gallery },
+  }));
 }
 
 const { entry } = Astro.props;

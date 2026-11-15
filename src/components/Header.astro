@@ -12,16 +12,12 @@ import {
   getLangFromUrl,
   useTranslations,
   localizePath,
-  switchLangPath,
   stripLang,
 } from "@/i18n/utils";
-import { LANG_LABELS } from "@/i18n/ui";
 
 const { pathname } = Astro.url;
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
-const otherLang = lang === "zh-CN" ? "en" : "zh-CN";
-const switchHref = switchLangPath(pathname, otherLang);
 
 // 去掉语言前缀，再处理尾斜杠，用于导航高亮判断
 const barePath = stripLang(pathname);
@@ -149,18 +145,6 @@ const isActive = (path: string) => {
               )
             }
 
-            <!-- 语言切换 -->
-            <li class="flex items-center">
-              <a
-                href={switchHref}
-                hreflang={otherLang}
-                class="nav-lang-btn font-firacode text-xs"
-                title={t("nav.language")}
-                aria-label={t("nav.language")}
-              >
-                {LANG_LABELS[otherLang]}
-              </a>
-            </li>
 
             <!-- Separator -->
             <li class="flex items-center px-1" aria-hidden="true">
@@ -211,21 +195,6 @@ const isActive = (path: string) => {
 </header>
 
 <style>
-  .nav-lang-btn {
-    display: inline-flex;
-    align-items: center;
-    padding: 0.25rem 0.55rem;
-    border-radius: 0.5rem;
-    border: 1px solid color-mix(in srgb, var(--border) 35%, transparent);
-    color: color-mix(in srgb, var(--foreground) 70%, transparent);
-    transition: all 0.2s ease;
-  }
-  .nav-lang-btn:hover {
-    color: var(--accent);
-    border-color: color-mix(in srgb, var(--accent) 55%, transparent);
-    background: color-mix(in srgb, var(--accent) 10%, transparent);
-  }
-
   /* ─── Header Glass & Scroll Physics ─── */
   #main-header {
     background: transparent;
