@@ -3,6 +3,7 @@ import mdx from "@astrojs/mdx";
 import tailwindcss from "@tailwindcss/vite";
 import sitemap from "@astrojs/sitemap";
 import remarkToc from "remark-toc";
+import remarkCjkFriendly from "remark-cjk-friendly";
 import remarkCollapse from "remark-collapse";
 import {
   transformerNotationDiff,
@@ -30,7 +31,12 @@ export default defineConfig({
   markdown: {
     // 关掉，否则中文里的「......」会被折叠成单个「…」
     smartypants: false,
-    remarkPlugins: [remarkToc, [remarkCollapse, { test: "Table of contents" }]],
+    // remark-cjk-friendly：让「**强调。**汉字」这种 CJK 排版也能正确解析
+    remarkPlugins: [
+      remarkCjkFriendly,
+      remarkToc,
+      [remarkCollapse, { test: "Table of contents" }],
+    ],
     shikiConfig: {
       // For more themes, visit https://shiki.style/themes
       themes: { light: "min-light", dark: "github-dark-default" },

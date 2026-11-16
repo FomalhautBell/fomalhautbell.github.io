@@ -115,8 +115,15 @@
 
 /* 强调 */
 .prose-article strong {
-  font-weight: 600;
+  font-weight: 700;
   color: var(--foreground);
+}
+
+/* 斜体：沿用正文楷体，避免落到西文字体造成混排 */
+.prose-article em,
+.prose-article i {
+  font-family: inherit;
+  font-style: italic;
 }
 
 /* 链接：细下划线，悬停加粗，用强调色 */

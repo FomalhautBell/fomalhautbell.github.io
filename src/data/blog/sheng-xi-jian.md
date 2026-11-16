@@ -1,9 +1,10 @@
 ---
 title: "生息间"
-description: "一座小小的博物馆。"
+description: "一座小小的博物馆"
 pubDatetime: 2026-11-15T00:00:00Z
 tags:
-  - 小说 - 百合
+  - 小说
+  - 百合
 draft: false
 ---
 
