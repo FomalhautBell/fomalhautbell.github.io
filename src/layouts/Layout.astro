@@ -327,6 +327,12 @@ const showGrain = SITE.backdropEffects.grain;
     contain: paint;
   }
 
+  @media (max-width: 640px), (hover: none) {
+    .site-cursor-glow {
+      display: none;
+    }
+  }
+
   .site-cursor-glow.active {
     opacity: 1;
     will-change: transform;

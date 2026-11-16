@@ -57,6 +57,8 @@ i {
   }
   body {
     @apply flex min-h-svh flex-col bg-background font-app text-foreground selection:bg-accent/75 selection:text-background;
+    /* 装饰性绝对定位元素不撑出横向滚动（移动端常见问题） */
+    overflow-x: clip;
   }
   a,
   button {
