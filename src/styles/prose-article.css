@@ -187,6 +187,12 @@
   margin: 0.35em 0;
 }
 
+/* Tailwind Typography 会给引用自动加引号，去掉 */
+.prose-article blockquote p:first-of-type::before,
+.prose-article blockquote p:last-of-type::after {
+  content: none;
+}
+
 /* 列表 */
 .prose-article ul,
 .prose-article ol {
