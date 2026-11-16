@@ -39,8 +39,6 @@
 /* 段落：参考主题的紧凑节奏，不用大段留白 */
 .prose-article p {
   margin: 0.85em 0;
-  text-align: justify;
-  text-justify: inter-ideograph;
   text-wrap: pretty;
 }
 
@@ -252,8 +250,12 @@
 /* 窄屏：正文略微紧凑，行首缩进取消 */
 @media (max-width: 640px) {
   .prose-article {
-    font-size: 1.0625rem;
-    line-height: 1.7;
+    font-size: 1rem;
+    line-height: 1.66;
+  }
+
+  .prose-article p {
+    margin: 0.78em 0;
   }
 
   .prose-article h1,

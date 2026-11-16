@@ -52,6 +52,8 @@ i {
   }
   html {
     @apply overflow-y-scroll scroll-smooth;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
   }
   body {
     @apply flex min-h-svh flex-col bg-background font-app text-foreground selection:bg-accent/75 selection:text-background;
