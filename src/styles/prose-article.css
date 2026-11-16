@@ -173,8 +173,12 @@
     "calt" 0;
 }
 
-/* 引用：左侧色条，不加底色，中文不用斜体 */
+/* 引用：左侧色条，不加底色，中文不用斜体；字体走系统的 STKaiti SC */
 .prose-article blockquote {
+  font-family:
+    "STKaitiSC-Regular", "STKaitiSC", "Kaiti SC", "STKaiti", "KaiTi",
+    "LXGW WenKai", serif;
+  font-size: 1.08em;
   margin: 1.4em 0;
   padding: 0.15em 0 0.15em 1.1em;
   border-inline-start: 3px solid color-mix(in srgb, var(--accent) 45%, transparent);
