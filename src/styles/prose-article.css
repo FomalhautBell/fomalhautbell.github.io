@@ -21,10 +21,10 @@
 
 .prose-article {
   /* 拉丁字符用站点正文字体，中文字符落到楷体 */
-  /* 楷体优先：系统楷体（更挺括），没有时回落到随仓库分发的文楷 */
+  /* 正文：霞鹜文楷（随仓库分发）；引用块另用系统楷体，见下方 blockquote */
   font-family:
-    "STKaitiSC-Regular", "STKaitiSC", "Kaiti SC", "STKaiti", "KaiTi",
-    "LXGW WenKai", "Songti SC", serif;
+    "LXGW WenKai", "Kaiti SC", "STKaiti", "KaiTi", "Songti SC",
+    "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", serif;
   font-size: 1.15rem;
   line-height: 1.72;
   font-kerning: normal;
