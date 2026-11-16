@@ -21,10 +21,10 @@
 
 .prose-article {
   /* 拉丁字符用站点正文字体，中文字符落到楷体 */
-  /* 楷体优先：拉丁与中文都用文楷，形成统一的书写质感 */
+  /* 楷体优先：系统楷体（更挺括），没有时回落到随仓库分发的文楷 */
   font-family:
-    "LXGW WenKai", "Kaiti SC", "STKaiti", "KaiTi", "Songti SC",
-    "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", serif;
+    "STKaitiSC-Regular", "STKaitiSC", "Kaiti SC", "STKaiti", "KaiTi",
+    "LXGW WenKai", "Songti SC", serif;
   font-size: 1.15rem;
   line-height: 1.72;
   font-kerning: normal;
@@ -39,6 +39,8 @@
 /* 段落：参考主题的紧凑节奏，不用大段留白 */
 .prose-article p {
   margin: 0.85em 0;
+  text-align: justify;
+  text-justify: inter-ideograph;
   text-wrap: pretty;
 }
 
@@ -106,10 +108,12 @@
   height: 3px;
   margin-top: 0.5em;
   border-radius: 999px;
+  /* 收尾保留 30% 的色，右端才不会「渐隐到看不见」而显得没对齐 */
   background: linear-gradient(
     90deg,
-    var(--accent),
-    color-mix(in srgb, var(--accent) 0%, transparent)
+    var(--accent) 0%,
+    color-mix(in srgb, var(--accent) 72%, transparent) 72%,
+    color-mix(in srgb, var(--accent) 30%, transparent) 100%
   );
 }
 
