@@ -91,12 +91,18 @@
 }
 
 
-/* 标题下的小渐变线（沿用 AstroPaper 的装饰语言，留给后续复用） */
+/* 标题下的小渐变线，宽度跟随标题文字本身的长度 */
+.prose-article h2,
+.prose-article h3 {
+  width: fit-content;
+  max-width: 100%;
+}
+
 .prose-article h2::after,
 .prose-article h3::after {
   content: "";
   display: block;
-  width: 2.5rem;
+  width: 100%;
   height: 3px;
   margin-top: 0.5em;
   border-radius: 999px;

@@ -8,6 +8,11 @@
 ---
 
 <div class="toc-island" data-toc-island>
+  <nav id="toc-panel" class="toc-panel" aria-label="文章目录" hidden>
+    <p class="toc-heading">目录</p>
+    <ol class="toc-list" data-toc-list></ol>
+  </nav>
+
   <button
     type="button"
     class="toc-toggle"
@@ -25,11 +30,6 @@
       <line x1="3" y1="18" x2="3.01" y2="18" />
     </svg>
   </button>
-
-  <nav id="toc-panel" class="toc-panel" aria-label="文章目录" hidden>
-    <p class="toc-heading">目录</p>
-    <ol class="toc-list" data-toc-list></ol>
-  </nav>
 </div>
 
 <style>
@@ -89,16 +89,25 @@
     padding: 0.5rem;
     border-radius: 1rem;
     border: 1px solid color-mix(in srgb, var(--border) 28%, transparent);
-    background: color-mix(in srgb, var(--background) 96%, transparent);
-    -webkit-backdrop-filter: blur(24px) saturate(160%);
-    backdrop-filter: blur(24px) saturate(160%);
+    /* 亚克力：半透明底 + 强模糊 + 顶部高光 */
+    background: color-mix(in srgb, var(--background) 82%, transparent);
+    -webkit-backdrop-filter: blur(32px) saturate(180%);
+    backdrop-filter: blur(32px) saturate(180%);
     box-shadow:
-      0 24px 60px -24px color-mix(in srgb, var(--foreground) 35%, transparent),
-      0 0 0 0.5px color-mix(in srgb, var(--foreground) 6%, transparent);
+      inset 0 1px 0 color-mix(in srgb, white 14%, transparent),
+      inset 0 -1px 0 color-mix(in srgb, var(--foreground) 8%, transparent),
+      0 24px 60px -24px color-mix(in srgb, var(--foreground) 38%, transparent),
+      0 0 0 0.5px color-mix(in srgb, var(--foreground) 8%, transparent);
     transform-origin: bottom left;
     animation: toc-in 0.18s cubic-bezier(0.16, 1, 0.3, 1) both;
     scrollbar-width: thin;
     scrollbar-color: color-mix(in srgb, var(--muted) 80%, transparent) transparent;
+  }
+
+  @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    .toc-panel {
+      background: color-mix(in srgb, var(--background) 97%, transparent);
+    }
   }
 
   .toc-panel::-webkit-scrollbar {
